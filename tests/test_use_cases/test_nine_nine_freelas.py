@@ -35,6 +35,11 @@ def test_get_projects(browser) -> None:
     assert projects != browser.get_projects(category, page=2)
 
 
+def test_get_projects_with_invalid_category(browser) -> None:
+    with pytest.raises(ValueError):
+        browser.get_projects('Limpeza', page=1)
+
+
 def test_send_message(browser) -> None:
     project = browser.get_projects('Engenharia & Arquitetura', page=3)[5]
     message = (

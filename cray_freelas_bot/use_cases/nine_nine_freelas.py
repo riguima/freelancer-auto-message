@@ -41,6 +41,8 @@ class NineNineBrowser(IBrowser):
         )]
 
     def get_projects(self, category: str = 'Todas as categorias', page: int = 1) -> list[Project]:
+        if category not in self.get_all_categories():
+            raise ValueError('Invalid category.')
         fixed_category = category.replace('&', 'e')
         self.driver.get(
             f'https://www.99freelas.com.br/projects?order=mais-recentes&categoria={slugify(fixed_category)}&page={page}'
