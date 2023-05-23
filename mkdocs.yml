@@ -1,1 +1,8 @@
-site_name: My Docs
+site_name: Cray Freelas Bot
+
+theme:
+  name: material
+  language: pt-BR
+
+markdown_extensions:
+  - attr_list
