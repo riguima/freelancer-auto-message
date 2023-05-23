@@ -38,7 +38,7 @@ def test_make_login(browser: NineNineBrowser) -> None:
 
 def test_get_all_categories(browser: NineNineBrowser) -> None:
     expected = json.load(
-        open('tests/test_use_cases/nine_nine_categories.json', 'r')
+        open('tests/test_utils/nine_nine_categories.json', 'r')
     )
     assert browser.get_all_categories() == expected
 
@@ -98,7 +98,7 @@ def test_send_message(driver: Chrome, browser: NineNineBrowser) -> None:
     project = browser.get_projects(
         'Web, Mobile & Software', page=randint(20, 30)
     )[randint(0, 9)]
-    message = (
+    text = (
         f'{get_greeting_according_time(datetime.now().time())} '
         f'{project.client_name}, tudo bem?\n'
         f'Ao ler sobre o seu projeto "{project.name}", percebi que ele está '
@@ -107,8 +107,9 @@ def test_send_message(driver: Chrome, browser: NineNineBrowser) -> None:
         'possui algum detalhe em específico que considera fundamental?\n'
         f'ass: {browser.get_account_name()}'
     )
-    browser.send_message(project.url, message)
+    message = browser.send_message(project.url, text)
     driver.get('https://www.99freelas.com.br/messages/inbox')
     assert (
-        find_elements(driver, '.message-text:not(.empty)')[-1].text == message
+        find_elements(driver, '.message-text:not(.empty)')[-1].text
+        == message.text
     )

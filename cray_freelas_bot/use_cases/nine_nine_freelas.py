@@ -5,7 +5,7 @@ from slugify import slugify
 
 from cray_freelas_bot.common.driver import click, find_element, find_elements
 from cray_freelas_bot.domain.browser import IBrowser
-from cray_freelas_bot.domain.models import Project
+from cray_freelas_bot.domain.models import Message, Project
 from cray_freelas_bot.exceptions.project import (
     CategoryError,
     LoginError,
@@ -90,10 +90,11 @@ class NineNineBrowser(IBrowser):
                 'Projeto ainda não está disponivel para mandar mensagens'
             )
 
-    def send_message(self, project_url: str, message: str) -> None:
+    def send_message(self, project_url: str, message: str) -> Message:
         self.driver.get(project_url)
         self.driver.get(
             find_element(self.driver, '.txt-duvidas a').get_attribute('href')
         )
         find_element(self.driver, '#mensagem-pergunta').send_keys(message)
         click(self.driver, '#btnEnviarPergunta')
+        return Message(project=self.get_project(project_url), text=message)

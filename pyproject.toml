@@ -18,6 +18,8 @@ blue = "^0.9.1"
 isort = "^5.12.0"
 mkdocs-material = "^9.1.14"
 pytest-cov = "^4.0.0"
+pandas = "^2.0.1"
+openpyxl = "^3.1.2"
 
 
 [tool.poetry.group.dev.dependencies]
