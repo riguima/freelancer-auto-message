@@ -1,11 +1,15 @@
 from selenium.webdriver import Chrome
+from selenium.webdriver.common.by import By
 from selenium.common.exceptions import TimeoutException
 from time import sleep
 from slugify import slugify
 
 from cray_freelas_bot.domain.browser import IBrowser
-from cray_freelas_bot.domain.models import Project, Message
+from cray_freelas_bot.domain.models import Project
 from cray_freelas_bot.common.driver import find_element, find_elements, click
+from cray_freelas_bot.exceptions.nine_nine_freelas import (
+    UnreleasedProjectError
+)
 
 
 class NineNineBrowser(IBrowser):
@@ -55,29 +59,28 @@ class NineNineBrowser(IBrowser):
 
     def get_project(self, url: str) -> Project:
         self.driver.get(url)
-        return Project(
-            client_name=find_element(self.driver, '.info-usuario-nome .name').text,
-            name=find_element(self.driver, '.nomeProjeto').text,
-            category=find_element(self.driver, 'td').text,
-            url=url,
-        )
+        try:
+            return Project(
+                client_name=find_element(self.driver, '.info-usuario-nome .name').text,
+                name=find_element(self.driver, '.nomeProjeto').text,
+                category=find_element(self.driver, 'td').text,
+                url=url,
+            )
+        except TimeoutException:
+            if self.driver.find_elements(By.CSS_SELECTOR, '.fail'):
+                raise ValueError('O projeto não existe')
+            raise UnreleasedProjectError()
 
-    def send_message(self, project_url: str, message: str) -> Message:
+    def send_message(self, project_url: str, message: str) -> None:
         self.driver.get(project_url)
         self.driver.get(
             find_element(self.driver, '.txt-duvidas a').get_attribute('href')
         )
         find_element(self.driver, '#mensagem-pergunta').send_keys(message)
         click(self.driver, '#btnEnviarPergunta')
-        return Message(
-            project=self.get_project(project_url),
-            text=message,
-        )
 
-    def get_last_message(self) -> Message:
+    def get_last_message(self) -> str:
         self.driver.get('https://www.99freelas.com.br/messages/inbox')
-        url = find_element(self.driver, '.nome-projeto').get_attribute('href')
-        return Message(
-            project=self.get_project(url),
-            text=find_elements(self.driver, '.message-text:not(.empty)')[-1].text,
-        )
+        return find_elements(
+            self.driver, '.message-text:not(.empty)'
+        )[-1].text

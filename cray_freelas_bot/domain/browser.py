@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from cray_freelas_bot.domain.models import Message, Project
+from cray_freelas_bot.domain.models import Project
 
 
 class IBrowser(ABC):
@@ -14,11 +14,11 @@ class IBrowser(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def send_message(self, project_url: str, message: str) -> Message:
+    def send_message(self, project_url: str, message: str) -> None:
         raise NotImplementedError()
 
     @abstractmethod
-    def get_last_message(self) -> Message:
+    def get_last_message(self) -> str:
         raise NotImplementedError()
 
     @abstractmethod
