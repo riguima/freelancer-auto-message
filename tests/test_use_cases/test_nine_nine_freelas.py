@@ -26,35 +26,28 @@ def browser(driver: Chrome) -> NineNineBrowser:
     return NineNineBrowser(driver)
 
 
-@pytest.fixture(scope='module')
-def login(browser) -> bool:
-    return browser.make_login(
-        'miqueiasmartinsoficial@gmail.com', 'Projeto#1bot'
-    )
-
-
-def test_make_login(browser: NineNineBrowser, login: bool) -> None:
-    assert login
-
-
 def test_make_login_with_invalid_login(browser: NineNineBrowser) -> None:
     with pytest.raises(LoginError) as error:
         browser.make_login('richard.alexsander.guima@gmail.com', 'Richard123')
     assert error.value.args[0] == 'Email ou senha inválidos'
 
 
-def test_get_all_categories(browser: NineNineBrowser, login: bool) -> None:
+def test_make_login(browser: NineNineBrowser) -> None:
+    browser.make_login('miqueiasmartinsoficial@gmail.com', 'Projeto#1bot')
+
+
+def test_get_all_categories(browser: NineNineBrowser) -> None:
     expected = json.load(
         open('tests/test_use_cases/nine_nine_categories.json', 'r')
     )
     assert browser.get_all_categories() == expected
 
 
-def test_get_account_name(browser: NineNineBrowser, login: bool) -> None:
+def test_get_account_name(browser: NineNineBrowser) -> None:
     assert browser.get_account_name() == 'Miqueias Martin'
 
 
-def test_get_project(browser: NineNineBrowser, login: bool) -> None:
+def test_get_project(browser: NineNineBrowser) -> None:
     url = (
         'https://www.99freelas.com.br/project/'
         'transformar-loja-em-casa-residencial-437559?fs=t'
@@ -68,9 +61,7 @@ def test_get_project(browser: NineNineBrowser, login: bool) -> None:
     assert browser.get_project(url) == expected
 
 
-def test_get_project_with_invalid_url(
-    browser: NineNineBrowser, login: bool
-) -> None:
+def test_get_project_with_invalid_url(browser: NineNineBrowser) -> None:
     with pytest.raises(ProjectError) as error:
         browser.get_project(
             'https://www.99freelas.com.br/project/trdial-4459?fs=t'
@@ -78,9 +69,7 @@ def test_get_project_with_invalid_url(
     assert error.value.args[0] == 'O projeto não existe'
 
 
-def test_get_project_with_unreleased_project(
-    browser: NineNineBrowser, login: bool
-) -> None:
+def test_get_project_with_unreleased_project(browser: NineNineBrowser) -> None:
     with pytest.raises(ProjectError) as error:
         url = browser.get_projects('Engenharia & Arquitetura')[0].url
         browser.get_project(url)
@@ -89,15 +78,13 @@ def test_get_project_with_unreleased_project(
     )
 
 
-def test_get_projects(browser: NineNineBrowser, login: bool) -> None:
+def test_get_projects(browser: NineNineBrowser) -> None:
     category = 'Engenharia & Arquitetura'
     projects = browser.get_projects(category, page=4)
     assert len(projects) == 10
 
 
-def test_get_projects_with_invalid_category(
-    browser: NineNineBrowser, login: bool
-) -> None:
+def test_get_projects_with_invalid_category(browser: NineNineBrowser) -> None:
     category = 'Limpeza'
     with pytest.raises(CategoryError) as error:
         browser.get_projects(category, page=1)
@@ -107,9 +94,7 @@ def test_get_projects_with_invalid_category(
     )
 
 
-def test_send_message(
-    driver: Chrome, browser: NineNineBrowser, login: bool
-) -> None:
+def test_send_message(driver: Chrome, browser: NineNineBrowser) -> None:
     project = browser.get_projects(
         'Web, Mobile & Software', page=randint(20, 30)
     )[randint(0, 9)]
