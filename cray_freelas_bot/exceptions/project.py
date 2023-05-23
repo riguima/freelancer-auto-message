@@ -4,3 +4,7 @@ class CategoryError(Exception):
 
 class ProjectError(Exception):
     pass
+
+
+class LoginError(Exception):
+    pass

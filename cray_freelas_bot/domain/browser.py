@@ -4,7 +4,6 @@ from cray_freelas_bot.domain.models import Project
 
 
 class IBrowser(ABC):
-
     @abstractmethod
     def make_login(self, username: str, password: str) -> bool:
         raise NotImplementedError()
@@ -15,10 +14,6 @@ class IBrowser(ABC):
 
     @abstractmethod
     def send_message(self, project_url: str, message: str) -> None:
-        raise NotImplementedError()
-
-    @abstractmethod
-    def get_last_message(self) -> str:
         raise NotImplementedError()
 
     @abstractmethod
