@@ -7,3 +7,9 @@ class Project:
     category: str
     name: str
     client_name: str
+
+
+@dataclass
+class Message:
+    project: Project
+    text: str
