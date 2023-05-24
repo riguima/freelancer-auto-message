@@ -3,7 +3,12 @@ from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from slugify import slugify
 
-from cray_freelas_bot.common.driver import click, find_element, find_elements
+from cray_freelas_bot.common.driver import (
+    click,
+    create_driver,
+    find_element,
+    find_elements,
+)
 from cray_freelas_bot.domain.browser import IBrowser
 from cray_freelas_bot.domain.models import Message, Project
 from cray_freelas_bot.exceptions.project import (
@@ -17,8 +22,12 @@ class NineNineBrowser(IBrowser):
     """
     Implementação de IBrowser para o site 99Freelas, os métodos são os mesmos da interface, então o modo de uso será identico
     """
-    def __init__(self, driver: Chrome) -> None:
-        self.driver = driver
+    def __init__(self, visible: bool = False) -> None:
+        """
+        Parameters:
+            visible: Para mostrar ou não o navegador, por padrão é False, ou seja, não mostra
+        """
+        self.driver = create_driver(visible=visible)
 
     def make_login(self, username: str, password: str) -> None:
         self.driver.delete_all_cookies()
