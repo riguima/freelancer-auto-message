@@ -34,8 +34,8 @@ def to_excel(messages: list[Message], path: str) -> pd.DataFrame:
     """
     Exporta mensagens para uma planilha em Excel
     Parameters:
-        messages: A lista de mensagens que serão adicionadas a planilha
-        path: Caminho para o arquivo com o resultado, tem que ter a extensão .xlsx
+        messages: A lista de mensagens que serão adicionadas a planilha, são instâncias da classe Message
+        path: Caminho para o arquivo com o resultado, tem que ser com extensão .xlsx
     Returns:
         Uma DataFrame do pandas com os dados das mensagens
     Examples:

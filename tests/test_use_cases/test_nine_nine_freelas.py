@@ -5,7 +5,7 @@ from random import randint
 import pytest
 from selenium.webdriver import Chrome
 
-from cray_freelas_bot.common.driver import create_driver, find_elements
+from cray_freelas_bot.common.driver import find_elements
 from cray_freelas_bot.common.project import get_greeting_according_time
 from cray_freelas_bot.domain.models import Project
 from cray_freelas_bot.exceptions.project import (
@@ -17,13 +17,13 @@ from cray_freelas_bot.use_cases.nine_nine_freelas import NineNineBrowser
 
 
 @pytest.fixture(scope='module')
-def driver() -> Chrome:
-    return create_driver(visible=True)
+def browser() -> NineNineBrowser:
+    return NineNineBrowser(visible=True)
 
 
 @pytest.fixture(scope='module')
-def browser(driver: Chrome) -> NineNineBrowser:
-    return NineNineBrowser(driver)
+def driver(browser: NineNineBrowser) -> Chrome:
+    return browser.driver
 
 
 def test_make_login_with_invalid_login(browser: NineNineBrowser) -> None:
