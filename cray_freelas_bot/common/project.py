@@ -6,6 +6,22 @@ from cray_freelas_bot.domain.models import Message
 
 
 def get_greeting_according_time(greeting_time: time) -> str:
+    """
+    Retorna a saudação correta de acordo com o horário passado como parâmetro
+    Parameters:
+        greeting_time: Horário
+    Returns:
+        Uma string com a saudação correta
+    Examples:
+        >>> from datetime import time
+        >>>
+        >>> get_greeting_according_time(time(12, 0, 0))
+        Boa tarde
+        >>> get_greeting_according_time(time(9, 45, 30))
+        Bom dia
+        >>> get_greeting_according_time(time(20, 30, 0))
+        Boa noite
+    """
     if time(0, 0, 0) <= greeting_time <= time(11, 59, 59):
         return 'Bom dia'
     elif time(12, 0, 0) <= greeting_time <= time(18, 59, 59):
@@ -15,6 +31,29 @@ def get_greeting_according_time(greeting_time: time) -> str:
 
 
 def to_excel(messages: list[Message], path: str) -> pd.DataFrame:
+    """
+    Exporta mensagens para uma planilha em Excel
+    Parameters:
+        messages: A lista de mensagens que serão adicionadas a planilha
+        path: Caminho para o arquivo com o resultado, tem que ter a extensão .xlsx
+    Returns:
+        Uma DataFrame do pandas com os dados das mensagens
+    Examples:
+        >>> from cray_freelas_bot.domain.models import Message, Project
+        >>>
+        >>> messages = [
+            Message(
+                project=Project(
+                    name='Nome do projeto',
+                    client_name='Nome do cliente',
+                    category='Web, Mobile & Software',
+                    url='urldeexemplo.com.br',
+                ),
+                text='Mensagem de exemplo',
+            ),
+        ]
+        >>> to_excel(messages, 'result.xlsx')
+    """
     df = pd.DataFrame(
         columns=[
             'Nome do projeto',

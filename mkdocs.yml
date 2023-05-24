@@ -4,5 +4,17 @@ theme:
   name: material
   language: pt-BR
 
+plugins:
+  - mkdocstrings:
+      enabled: true
+      default_handler: python
+      handlers:
+        python:
+          options:
+            show_source: false
+
+nav:
+  - "Utilitários": api/common.md
+
 markdown_extensions:
   - attr_list
