@@ -10,47 +10,47 @@ class IBrowser(ABC):
         >>> from cray_freelas_bot.domain.browser import IBrowser
         >>>
         >>> class FakeBrowser(IBrowser):
-                def make_login(self, username: str, password: str) -> None:
-                    print('Fazendo login...')
-
-                def get_account_name(self) -> str:
-                    return 'Nome da conta'
-
-                def send_message(self, project_url: str, message: str) -> Message:
-                    print('Enviando mensagem')
-                    project = Project(
-                        name='Projeto 1',
-                        category='Web, Mobile & Software',
-                        url='exampleurl.com.br',
-                        client_name='Rogerio',
-                    )
-                    return Message(project=project, text='Ola')
-
-                def get_all_categories(self) -> list[str]:
-                    return ['Web, Mobile & Software', 'Engenharia']
-
-                def get_projects(self, category: str, page: int) -> list[Project]:
-                    projects = [
-                        Project(
-                            name='Projeto 1',
-                            category='Web, Mobile & Software',
-                            url='exampleurl.com.br',
-                            client_name='Rogerio',
-                        ),
-                        Project(
-                            name='Projeto 2',
-                            category='Engenharia',
-                            url='exampleurl2.com.br',
-                            client_name='Maria',
-                        ),
-                        Project(
-                            name='Projeto 3',
-                            category='Marketing',
-                            url='exampleurl3.com.br',
-                            client_name='Carlos',
-                        ),
-                    ]
-                    return projects
+        >>>     def make_login(self, username: str, password: str) -> None:
+        >>>         print('Fazendo login...')
+        >>>
+        >>>     def get_account_name(self) -> str:
+        >>>         return 'Nome da conta'
+        >>>
+        >>>     def send_message(self, project_url: str, message: str) -> Message:
+        >>>         print('Enviando mensagem')
+        >>>         project = Project(
+        >>>             name='Projeto 1',
+        >>>             category='Web, Mobile & Software',
+        >>>             url='exampleurl.com.br',
+        >>>             client_name='Rogerio',
+        >>>         )
+        >>>         return Message(project=project, text='Ola')
+        >>>
+        >>>     def get_all_categories(self) -> list[str]:
+        >>>         return ['Web, Mobile & Software', 'Engenharia']
+        >>>
+        >>>     def get_projects(self, category: str, page: int) -> list[Project]:
+        >>>         projects = [
+        >>>             Project(
+        >>>                 name='Projeto 1',
+        >>>                 category='Web, Mobile & Software',
+        >>>                 url='exampleurl.com.br',
+        >>>                 client_name='Rogerio',
+        >>>             ),
+        >>>             Project(
+        >>>                 name='Projeto 2',
+        >>>                 category='Engenharia',
+        >>>                 url='exampleurl2.com.br',
+        >>>                 client_name='Maria',
+        >>>             ),
+        >>>             Project(
+        >>>                 name='Projeto 3',
+        >>>                 category='Marketing',
+        >>>                 url='exampleurl3.com.br',
+        >>>                 client_name='Carlos',
+        >>>             ),
+        >>>         ]
+        >>>         return projects
     """
     @abstractmethod
     def make_login(self, username: str, password: str) -> None:
