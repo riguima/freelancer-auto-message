@@ -33,10 +33,10 @@ def click(driver: Chrome, selector: str, element=None) -> None:
         element: Argumento opcional, define a partir de qual elemento ele deve fazer a busca do elemento especificado em selector
     Examples:
         >>> from cray_freelas_bot.common.driver import (
-                create_driver,
-                click,
-                find_element,
-            )
+        >>>     create_driver,
+        >>>     click,
+        >>>     find_element,
+        >>> )
         >>>
         >>> driver = create_driver()
         >>> click(driver, 'button[type=submit]')
@@ -64,9 +64,9 @@ def find_element(element, selector: str, wait: int = 20):
         Retorna o primeiro elemento com seletor especificado
     Examples:
         >>> from cray_freelas_bot.common.driver import (
-                create_driver,
-                find_element,
-            )
+        >>>     create_driver,
+        >>>     find_element,
+        >>> )
         >>>
         >>> driver = create_driver()
         >>> # Procura pelo primeiro elemento com tag a dentro de uma div
@@ -93,10 +93,10 @@ def find_elements(element, selector: str, wait: int = 20):
         Retorna todos os elementos que correspondem ao seletor especificado
     Examples:
         >>> from cray_freelas_bot.common.driver import (
-                create_driver,
-                find_element,
-                find_elements,
-            )
+        >>>     create_driver,
+        >>>     find_element,
+        >>>     find_elements,
+        >>> )
         >>>
         >>> driver = create_driver()
         >>> # Procura por todas as div da página

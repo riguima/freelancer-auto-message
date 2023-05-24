@@ -3,6 +3,21 @@ site_name: Cray Freelas Bot
 theme:
   name: material
   language: pt-BR
+  palette:
+    - media: "dark"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Alterar para modo claro
+    - media:
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Alterar para modo escuro
+
+watch:
+  - cray_freelas_bot
+  - docs
 
 plugins:
   - mkdocstrings:
@@ -12,9 +27,6 @@ plugins:
         python:
           options:
             show_source: false
-
-nav:
-  - "Utilitários": api/common.md
 
 markdown_extensions:
   - attr_list
