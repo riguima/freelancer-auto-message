@@ -14,6 +14,9 @@ from cray_freelas_bot.exceptions.project import (
 
 
 class NineNineBrowser(IBrowser):
+    """
+    Implementação de IBrowser para o site 99Freelas, os métodos são os mesmos da interface, então o modo de uso será identico
+    """
     def __init__(self, driver: Chrome) -> None:
         self.driver = driver
 
