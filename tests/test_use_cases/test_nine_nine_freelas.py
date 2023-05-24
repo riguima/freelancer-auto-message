@@ -5,7 +5,7 @@ from random import randint
 import pytest
 from selenium.webdriver import Chrome
 
-from cray_freelas_bot.common.driver import create_driver, find_elements
+from cray_freelas_bot.common.driver import find_elements
 from cray_freelas_bot.common.project import get_greeting_according_time
 from cray_freelas_bot.domain.models import Project
 from cray_freelas_bot.exceptions.project import (
