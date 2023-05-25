@@ -15,7 +15,7 @@ class ConfigurationWindow(QtWidgets.QWidget):
         super().__init__()
         self.setStyleSheet('font-size: 20px;')
         self.setFixedSize(700, 500)
-        self.setWindowTitle('Tela Principal')
+        self.setWindowTitle('Configurações')
 
         self.return_window = return_window
 

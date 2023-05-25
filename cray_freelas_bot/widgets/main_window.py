@@ -15,12 +15,12 @@ class MainWindow(QtWidgets.QWidget):
     def __init__(self) -> None:
         super().__init__()
         self.setStyleSheet('font-size: 20px;')
-        self.setFixedSize(500, 250)
+        self.setFixedSize(200, 100)
         self.setWindowTitle('Tela Principal')
 
         self.configuration_window = ConfigurationWindow(self)
 
-        self.configuration_button = Button('Configuração')
+        self.configuration_button = Button('Configurações')
         self.configuration_button.clicked.connect(self.show_configuration)
 
         self.run_button = Button('Rodar')
@@ -28,6 +28,7 @@ class MainWindow(QtWidgets.QWidget):
 
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.configuration_button)
+        self.layout.addWidget(self.run_button)
 
     @QtCore.Slot()
     def show_configuration(self) -> None:
@@ -36,17 +37,21 @@ class MainWindow(QtWidgets.QWidget):
     @QtCore.Slot()
     def run(self) -> None:
         try:
-            accounts = json.load(open('.secrets.json'))['accounts']
+            bots = json.load(open('.secrets.json'))['bots']
         except KeyError:
             raise ConfigError(
-                'Defina o login para as contas no arquivo .secrets.json'
+                'Crie primeiro os bots em Configurações'
             )
-        for account in accounts:
+        for bot in bots:
             module = import_module(
-                f'cray_freelas_bot.use_cases.{account["browser"]}'
+                f'cray_freelas_bot.use_cases.{bot["website"]}'
             )
             browser = self.get_browser_from_module(module)
-            Thread(browser.run).start()
+            browser.make_login(bot['username'], bot['password'])
+            Thread(self.run_browser, args=[browser]).start()
+
+    def run_browser(self, browser: IBrowser) -> None:
+        pass
 
     def get_browser_from_module(self, module) -> IBrowser:
         for _, obj in inspect.getmembers(module):

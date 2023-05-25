@@ -56,7 +56,7 @@ class IBrowser(ABC):
     @abstractmethod
     def make_login(self, username: str, password: str) -> None:
         """
-        para fazer o login com o bot
+        Para fazer o login com o bot
         parameters:
             username: email ou nome para primeiro campo de login
             password: senha para logar
