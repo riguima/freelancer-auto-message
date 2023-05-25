@@ -1,5 +1,4 @@
 from selenium.common.exceptions import TimeoutException
-from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 from slugify import slugify
 
@@ -22,6 +21,7 @@ class NineNineBrowser(IBrowser):
     """
     Implementação de IBrowser para o site 99Freelas, os métodos são os mesmos da interface, então o modo de uso será identico
     """
+
     def __init__(self, visible: bool = False) -> None:
         """
         Parameters:

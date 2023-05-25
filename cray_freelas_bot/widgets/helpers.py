@@ -2,14 +2,12 @@ from PySide6 import QtWidgets
 
 
 class Button(QtWidgets.QPushButton):
-
     def __init__(self, *args, **kwargs) -> None:
         super().__init__(*args, **kwargs)
         self.setStyleSheet('background-color: #187bcd; color: white')
 
 
 class HorizontalLayout(QtWidgets.QHBoxLayout):
-
     def __init__(
         self, label: QtWidgets.QLabel, input_widget: QtWidgets.QLineEdit
     ) -> None:
@@ -19,7 +17,6 @@ class HorizontalLayout(QtWidgets.QHBoxLayout):
 
 
 class DirectoryDialog(QtWidgets.QHBoxLayout):
-
     def __init__(
         self, window: QtWidgets.QWidget, directory_input: QtWidgets.QLineEdit
     ) -> None:
@@ -34,7 +31,9 @@ class DirectoryDialog(QtWidgets.QHBoxLayout):
         self.addWidget(self.button, 1)
 
     def open_directory_dialog(self) -> None:
-        result = str(QtWidgets.QFileDialog.getExistingDirectory(
-            self.window, 'Selecione uma pasta'
-        ))
+        result = str(
+            QtWidgets.QFileDialog.getExistingDirectory(
+                self.window, 'Selecione uma pasta'
+            )
+        )
         self.directory_input.setText(result)

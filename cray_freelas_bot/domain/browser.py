@@ -52,6 +52,7 @@ class IBrowser(ABC):
         >>>         ]
         >>>         return projects
     """
+
     @abstractmethod
     def make_login(self, username: str, password: str) -> None:
         """

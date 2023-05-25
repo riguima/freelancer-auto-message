@@ -11,6 +11,7 @@ class Project:
         name: Nome do projeto
         client_name: Nome do cliente que é o dono do projeto
     """
+
     url: str
     category: str
     name: str
@@ -25,5 +26,6 @@ class Message:
         project: Projeto correspondente a mensagem, que é uma instância da classe Project
         text: String que é o texto da mensagem
     """
+
     project: Project
     text: str

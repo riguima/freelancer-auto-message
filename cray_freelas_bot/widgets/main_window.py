@@ -1,9 +1,9 @@
-from importlib import import_module
 import inspect
 import json
+from importlib import import_module
 from threading import Thread
 
-from PySide6 import QtWidgets, QtCore
+from PySide6 import QtCore, QtWidgets
 
 from cray_freelas_bot.domain.browser import IBrowser
 from cray_freelas_bot.exceptions.widgets import ConfigError

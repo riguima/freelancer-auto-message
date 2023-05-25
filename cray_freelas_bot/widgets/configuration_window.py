@@ -7,6 +7,7 @@ from cray_freelas_bot.widgets.helpers import (
     DirectoryDialog,
     HorizontalLayout,
 )
+from cray_freelas_bot.widgets.tables_models import BrowserTable
 
 
 class ConfigurationWindow(QtWidgets.QWidget):
@@ -54,7 +55,7 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.report_folder_layout.addLayout(self.report_folder_dialog)
 
         self.add_browser_button = Button('Adicionar')
-        self.add_browser_button.clicked.connect(self.save_configuration)
+        self.add_browser_button.clicked.connect(self.add_browser)
 
         self.return_button = Button('Voltar')
         self.return_button.clicked.connect(self.return_to_window)
@@ -75,11 +76,13 @@ class ConfigurationWindow(QtWidgets.QWidget):
     @QtCore.Slot()
     def add_browser(self) -> None:
         data = json.load(open('.secrets.json'))
-        data['accounts'].update({
-            'username': self.username_input.text(),
-            'password': self.password_input.text(),
-            'browser': self.browser_combobox.currentText(),
-            'report_folder': self.report_folder_input.text(),
-        })
+        data['accounts'].update(
+            {
+                'username': self.username_input.text(),
+                'password': self.password_input.text(),
+                'browser': self.browser_combobox.currentText(),
+                'report_folder': self.report_folder_input.text(),
+            }
+        )
         self.message_box.setText('Configuração salva')
         self.message_box.show()
