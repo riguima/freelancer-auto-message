@@ -53,8 +53,8 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.report_folder_layout.addWidget(self.report_folder_label)
         self.report_folder_layout.addLayout(self.report_folder_dialog)
 
-        self.save_configuration_button = Button('Salvar')
-        self.save_configuration_button.clicked.connect(self.save_configuration)
+        self.add_browser_button = Button('Adicionar')
+        self.add_browser_button.clicked.connect(self.save_configuration)
 
         self.return_button = Button('Voltar')
         self.return_button.clicked.connect(self.return_to_window)
@@ -64,7 +64,7 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.layout.addLayout(self.password_layout)
         self.layout.addLayout(self.browser_layout)
         self.layout.addLayout(self.report_folder_layout)
-        self.layout.addWidget(self.save_configuration_button)
+        self.layout.addWidget(self.add_browser_button)
         self.layout.addWidget(self.return_button)
 
     @QtCore.Slot()
@@ -73,12 +73,13 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.close()
 
     @QtCore.Slot()
-    def save_configuration(self) -> None:
+    def add_browser(self) -> None:
         data = json.load(open('.secrets.json'))
         data['accounts'].update({
             'username': self.username_input.text(),
             'password': self.password_input.text(),
             'browser': self.browser_combobox.currentText(),
+            'report_folder': self.report_folder_input.text(),
         })
         self.message_box.setText('Configuração salva')
         self.message_box.show()
