@@ -1,7 +1,7 @@
 from PySide6 import QtCore
 
 
-class BrowserTableModel(QtCore.QAbstractTableModel):
+class BotTableModel(QtCore.QAbstractTableModel):
     def __init__(self, data: list[str], header: list[str]):
         super().__init__()
         self._data = data

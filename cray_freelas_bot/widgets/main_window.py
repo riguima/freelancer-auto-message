@@ -18,7 +18,7 @@ class MainWindow(QtWidgets.QWidget):
         self.setFixedSize(500, 250)
         self.setWindowTitle('Tela Principal')
 
-        self.configuration_window = ConfigurationWindow()
+        self.configuration_window = ConfigurationWindow(self)
 
         self.configuration_button = Button('Configuração')
         self.configuration_button.clicked.connect(self.show_configuration)
