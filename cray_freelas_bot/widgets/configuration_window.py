@@ -134,6 +134,9 @@ class ConfigurationWindow(QtWidgets.QWidget):
     def remove_bot(self) -> None:
         for index in self.bot_table.selectedIndexes():
             self.bot_table.model().delete_data(index)
+            data = json.load(open('.secrets.json'))
+            data['bots'].pop(index.row())
+            json.dump(data, open('.secrets.json', 'w'))
 
     def clear_inputs(self) -> None:
         widgets_inputs = [
