@@ -2,7 +2,11 @@ import json
 
 from PySide6 import QtCore, QtWidgets
 
-from cray_freelas_bot.widgets.helpers import Button, HorizontalLayout
+from cray_freelas_bot.widgets.helpers import (
+    Button,
+    DirectoryDialog,
+    HorizontalLayout,
+)
 
 
 class ConfigurationWindow(QtWidgets.QWidget):
@@ -39,6 +43,16 @@ class ConfigurationWindow(QtWidgets.QWidget):
             self.browser_combobox,
         )
 
+        self.report_folder_label = QtWidgets.QLabel('Pasta do relatório:')
+        self.report_folder_input = QtWidgets.QLineEdit()
+        self.report_folder_dialog = DirectoryDialog(
+            self,
+            self.report_folder_input,
+        )
+        self.report_folder_layout = QtWidgets.QVBoxLayout()
+        self.report_folder_layout.addWidget(self.report_folder_label)
+        self.report_folder_layout.addLayout(self.report_folder_dialog)
+
         self.save_configuration_button = Button('Salvar')
         self.save_configuration_button.clicked.connect(self.save_configuration)
 
@@ -48,6 +62,8 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addLayout(self.username_layout)
         self.layout.addLayout(self.password_layout)
+        self.layout.addLayout(self.browser_layout)
+        self.layout.addLayout(self.report_folder_layout)
         self.layout.addWidget(self.save_configuration_button)
         self.layout.addWidget(self.return_button)
 
