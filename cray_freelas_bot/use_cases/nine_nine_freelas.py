@@ -22,10 +22,10 @@ class NineNineBrowser(IBrowser):
     Implementação de IBrowser para o site 99Freelas, os métodos são os mesmos da interface, então o modo de uso será identico
     """
 
-    def __init__(self, visible: bool = False) -> None:
+    def __init__(self, visible: bool = True) -> None:
         """
         Parameters:
-            visible: Para mostrar ou não o navegador, por padrão é False, ou seja, não mostra
+            visible: Para mostrar ou não o navegador, por padrão é True, ou seja, mostra o navegador
         """
         self.driver = create_driver(visible=visible)
 
