@@ -1,10 +1,13 @@
 import inspect
 import json
 from importlib import import_module
-from threading import Thread
+from pathlib import Path
 
+import pandas as pd
 from PySide6 import QtCore, QtWidgets
+from rocketry import Rocketry
 
+from cray_freelas_bot.common.project import to_excel
 from cray_freelas_bot.domain.browser import IBrowser
 from cray_freelas_bot.exceptions.widgets import ConfigError
 from cray_freelas_bot.widgets.configuration_window import ConfigurationWindow
@@ -17,6 +20,8 @@ class MainWindow(QtWidgets.QWidget):
         self.setStyleSheet('font-size: 20px;')
         self.setFixedSize(200, 100)
         self.setWindowTitle('Tela Principal')
+
+        self.rock_app = Rocketry()
 
         self.configuration_window = ConfigurationWindow(self)
 
@@ -39,19 +44,29 @@ class MainWindow(QtWidgets.QWidget):
         try:
             bots = json.load(open('.secrets.json'))['bots']
         except KeyError:
-            raise ConfigError(
-                'Crie primeiro os bots em Configurações'
-            )
+            raise ConfigError('Crie primeiro os bots em Configurações')
         for bot in bots:
-            module = import_module(
-                f'cray_freelas_bot.use_cases.{bot["website"]}'
-            )
-            browser = self.get_browser_from_module(module)
-            browser.make_login(bot['username'], bot['password'])
-            Thread(self.run_browser, args=[browser]).start()
+            self.start_browser_task(bot)
+        self.rock_app.run()
 
-    def run_browser(self, browser: IBrowser) -> None:
-        pass
+    def start_browser_task(self, bot_data: dict) -> None:
+        module = import_module(
+            f'cray_freelas_bot.use_cases.{bot_data["website"]}'
+        )
+        browser = self.get_browser_from_module(module)
+        browser.make_login(bot_data['username'], bot_data['password'])
+
+        @self.rock_app.task('minutely')
+        def browser_task(execution='thread'):
+            report_path = Path(bot_data['report_folder'] / 'result.xlsx')
+            urls = pd.read_excel(report_path)['URL']
+            projects_urls = [
+                p.url for p in browser.get_projects(bot_data['category'])
+            ]
+            for project_url in projects_urls:
+                if project_url not in urls:
+                    message = browser.send_message(project_url)
+                    to_excel(message, report_path)
 
     def get_browser_from_module(self, module) -> IBrowser:
         for _, obj in inspect.getmembers(module):

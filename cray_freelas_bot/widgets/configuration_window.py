@@ -121,9 +121,7 @@ class ConfigurationWindow(QtWidgets.QWidget):
             {
                 'username': self.username_input.text(),
                 'password': self.password_input.text(),
-                'website': self.WEBSITES[
-                    self.website_combobox.currentText()
-                ],
+                'website': self.WEBSITES[self.website_combobox.currentText()],
                 'report_folder': self.report_folder_input.text(),
             }
         )
