@@ -7,7 +7,7 @@ from cray_freelas_bot.widgets.helpers import (
     DirectoryDialog,
     HorizontalLayout,
 )
-from cray_freelas_bot.widgets.tables_models import BrowserTable
+from cray_freelas_bot.widgets.tables_models import BrowserTableModel
 
 
 class ConfigurationWindow(QtWidgets.QWidget):
@@ -57,6 +57,18 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.add_browser_button = Button('Adicionar')
         self.add_browser_button.clicked.connect(self.add_browser)
 
+        self.browsers_table = QtWidgets.QTableView()
+        data = [
+            [b['username'], b['password'], b['browser'], b['report_folder']]
+            for b in json.load('.secrets.json')['browsers']
+        ]
+        self.browsers_table.setModel(
+            BrowserTableModel(
+                data,
+                ['Usuario/Email', 'Senha', 'Navegador', 'Pasta do relatório'],
+            )
+        )
+
         self.return_button = Button('Voltar')
         self.return_button.clicked.connect(self.return_to_window)
 
@@ -65,6 +77,7 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.layout.addLayout(self.password_layout)
         self.layout.addLayout(self.browser_layout)
         self.layout.addLayout(self.report_folder_layout)
+        self.layout.addWidget(self.browsers_table)
         self.layout.addWidget(self.add_browser_button)
         self.layout.addWidget(self.return_button)
 
@@ -76,7 +89,7 @@ class ConfigurationWindow(QtWidgets.QWidget):
     @QtCore.Slot()
     def add_browser(self) -> None:
         data = json.load(open('.secrets.json'))
-        data['accounts'].update(
+        data['browsers'].update(
             {
                 'username': self.username_input.text(),
                 'password': self.password_input.text(),
