@@ -93,6 +93,9 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.bot_table.setColumnWidth(2, 150)
         self.bot_table.setColumnWidth(3, 300)
 
+        self.remove_bot_button = Button('Remover bot')
+        self.remove_bot_button.clicked.connect(self.remove_bot)
+
         self.return_button = Button('Voltar')
         self.return_button.clicked.connect(self.return_to_window)
 
@@ -103,6 +106,7 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.layout.addLayout(self.report_folder_layout)
         self.layout.addWidget(self.add_bot_button)
         self.layout.addWidget(self.bot_table)
+        self.layout.addWidget(self.remove_bot_button)
         self.layout.addWidget(self.return_button)
 
     @QtCore.Slot()
@@ -127,6 +131,11 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.message_box.setText('Bot adicionado')
         self.message_box.show()
         self.clear_inputs()
+
+    @QtCore.Slot()
+    def remove_bot(self) -> None:
+        for index in self.bot_table.selectedIndexes():
+            self.bot_table.model().delete_data(index)
 
     def clear_inputs(self) -> None:
         widgets_inputs = [

@@ -11,6 +11,9 @@ class BotTableModel(QtCore.QAbstractTableModel):
         if role == QtCore.Qt.ItemDataRole.DisplayRole:
             return self._data[index.row()][index.column()]
 
+    def delete_data(self, index):
+        self._data.pop(index.row())
+
     def headerData(self, section, orientation, role):
         if (
             orientation == QtCore.Qt.Orientation.Horizontal
