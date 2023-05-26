@@ -55,13 +55,13 @@ def click(driver: Chrome, selector: str, element=None) -> None:
     )
 
 
-def find_element(element, selector: str, wait: int = 20):
+def find_element(element, selector: str, wait: int = 10):
     """
     Procura por um elemento na página, caso não encontre gera uma exceção
     Parameters:
         element: A partir de qual elemento ele deve fazer a busca do elemento especificado em selector
         selector: Seletor css que identifica o elemento que será buscado
-        wait: Argumento opcional, quantidade de tempo em segundos que ele deve esperar para encontrar o elemento, caso ultrapasse esse tempo ele vai retornar um erro do tipo selenium.common.exceptions.TimeoutException, por padrão ele espera por 20 segundos
+        wait: Argumento opcional, quantidade de tempo em segundos que ele deve esperar para encontrar o elemento, caso ultrapasse esse tempo ele vai retornar um erro do tipo selenium.common.exceptions.TimeoutException, por padrão ele espera por 10 segundos
     Returns:
         Retorna o primeiro elemento com seletor especificado
     Examples:
@@ -84,13 +84,13 @@ def find_element(element, selector: str, wait: int = 20):
     )
 
 
-def find_elements(element, selector: str, wait: int = 20):
+def find_elements(element, selector: str, wait: int = 10):
     """
     O mesmo que find_element, mas procura por todos os elementos correspondentes ao seletor
     Parameters:
         element: A partir de qual elemento ele deve fazer a busca dos elementos especificado em selector
         selector: Seletor css que identifica os elementos que serão buscados
-        wait: Argumento opcional, quantidade de tempo em segundos que ele deve esperar para encontrar os elementos, caso ultrapasse esse tempo ele vai retornar um erro do tipo selenium.common.exceptions.TimeoutException, por padrão ele espera por 20 segundos
+        wait: Argumento opcional, quantidade de tempo em segundos que ele deve esperar para encontrar os elementos, caso ultrapasse esse tempo ele vai retornar um erro do tipo selenium.common.exceptions.TimeoutException, por padrão ele espera por 10 segundos
     Returns:
         Retorna todos os elementos que correspondem ao seletor especificado
     Examples:

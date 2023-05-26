@@ -4,7 +4,7 @@ from pathlib import Path
 from time import sleep
 
 import pandas as pd
-from PySide6 import QtCore
+from PySide6 import QtCore, QtWidgets
 
 from cray_freelas_bot.common.project import (
     create_browser_from_module,
@@ -59,3 +59,36 @@ class BrowserThread(QtCore.QThread):
             )
             result.append(browser)
         return result
+
+
+class CreateBotThread(QtCore.QThread):
+    finished = QtCore.Signal()
+
+    def __init__(self, widget: QtWidgets.QWidget) -> None:
+        super().__init__()
+        self.widget = widget
+
+    def run(self) -> None:
+        data = json.load(open('.secrets.json'))
+        username = self.widget.username_input.text().split("@")[0].replace(
+            ".", "_"
+        )
+        bot = {
+            'username': self.widget.username_input.text(),
+            'password': self.widget.password_input.text(),
+            'website': self.widget.WEBSITES[
+                self.widget.website_combobox.currentText()
+            ],
+            'category': self.widget.category_combobox.currentText(),
+            'report_folder': self.widget.report_folder_input.text(),
+            'user_data_dir': f'.{username}_user_data',
+        }
+        browser = create_browser_from_module(
+            bot['website'],
+            user_data_dir=bot['user_data_dir'],
+        )
+        browser.make_login(bot['username'], bot['password'])
+        to_excel([], Path(bot['report_folder']) / 'result.xlsx')
+        data['bots'].append(bot)
+        json.dump(data, open('.secrets.json', 'w'))
+        self.finished.emit()

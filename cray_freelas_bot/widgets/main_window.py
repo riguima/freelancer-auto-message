@@ -36,6 +36,7 @@ class MainWindow(QtWidgets.QWidget):
     @QtCore.Slot()
     def show_bots_window(self) -> None:
         self.bots_window.show()
+        self.close()
 
     @QtCore.Slot()
     def run_browsers(self) -> None:
