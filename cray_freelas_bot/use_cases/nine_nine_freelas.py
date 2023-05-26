@@ -93,7 +93,7 @@ class NineNineBrowser(IBrowser):
         try:
             return Project(
                 client_name=find_element(
-                    self.driver, '.info-usuario-nome .name'
+                    self.driver, '.info-usuario-nome .name', wait=10
                 ).text,
                 name=find_element(self.driver, '.nomeProjeto').text,
                 category=find_element(self.driver, 'td').text,
