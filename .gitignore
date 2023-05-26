@@ -1,6 +1,7 @@
 # Project
 *.docx
 .secrets.json
+*user_data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
