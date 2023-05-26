@@ -74,8 +74,8 @@ class BotsWindow(QtWidgets.QWidget):
         self.report_folder_layout.addWidget(self.report_folder_label)
         self.report_folder_layout.addLayout(self.report_folder_dialog)
 
-        self.add_bot_button = Button('Adicionar bot')
-        self.add_bot_button.clicked.connect(self.add_bot)
+        self.create_bot_button = Button('Adicionar bot')
+        self.create_bot_button.clicked.connect(self.create_bot)
 
         self.bot_table = QtWidgets.QTableView()
         try:
@@ -122,7 +122,7 @@ class BotsWindow(QtWidgets.QWidget):
         self.layout.addLayout(self.website_layout)
         self.layout.addLayout(self.category_layout)
         self.layout.addLayout(self.report_folder_layout)
-        self.layout.addWidget(self.add_bot_button)
+        self.layout.addWidget(self.create_bot_button)
         self.layout.addWidget(self.bot_table)
         self.layout.addWidget(self.remove_bot_button)
         self.layout.addWidget(self.return_button)
@@ -144,7 +144,7 @@ class BotsWindow(QtWidgets.QWidget):
         browser.driver.close()
 
     @QtCore.Slot()
-    def add_bot(self) -> None:
+    def create_bot(self) -> None:
         data = json.load(open('.secrets.json'))
         bot = {
             'username': self.username_input.text(),
@@ -153,7 +153,7 @@ class BotsWindow(QtWidgets.QWidget):
             'category': self.category_combobox.currentText(),
             'report_folder': self.report_folder_input.text(),
             'user_data_dir': (
-                f'{self.username_input.text().split("@")[0].replace(".", "_")}'
+                f'.{self.username_input.text().split("@")[0].replace(".", "_")}'
                 '_user_data'
             ),
         }
