@@ -6,6 +6,7 @@ import pandas as pd
 from PySide6 import QtCore, QtWidgets
 
 from cray_freelas_bot.common.project import to_excel
+from cray_freelas_bot.exceptions.project import ProjectError
 
 
 class BrowserThread(QtCore.QThread):
@@ -24,6 +25,9 @@ class BrowserThread(QtCore.QThread):
                 ]
                 for project_url in projects_urls:
                     if project_url not in urls:
-                        message = browser.send_message(project_url)
+                        try:
+                            message = browser.send_message(project_url)
+                        except ProjectError:
+                            continue
                         to_excel([message], report_path)
             sleep(60)
