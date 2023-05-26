@@ -1,3 +1,5 @@
+from functools import cache
+
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from slugify import slugify
@@ -41,7 +43,6 @@ class NineNineBrowser(IBrowser):
                 errors_messages = self.driver.find_elements(
                     By.CSS_SELECTOR, '.general-error-msg'
                 )
-                print(errors_messages[0].get_attribute('style'))
                 if errors_messages and errors_messages[0].get_attribute(
                     'style'
                 ):
@@ -56,6 +57,7 @@ class NineNineBrowser(IBrowser):
         self.driver.get('https://www.99freelas.com.br/dashboard')
         return find_element(self.driver, '.user-name').text
 
+    @cache
     def get_all_categories(self) -> list[str]:
         self.driver.get('https://www.99freelas.com.br/projects')
         return [
@@ -74,6 +76,7 @@ class NineNineBrowser(IBrowser):
                 f'{self.get_all_categories()}'
             )
         fixed_category = category.replace('&', 'e')
+        print(fixed_category)
         self.driver.get(
             f'https://www.99freelas.com.br/projects?order=mais-recentes'
             f'&categoria={slugify(fixed_category)}&page={page}'

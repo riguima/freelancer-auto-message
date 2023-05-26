@@ -1,12 +1,8 @@
-import inspect
 import json
-from importlib import import_module
-from pathlib import Path
 
 from PySide6 import QtCore, QtWidgets
 
-from cray_freelas_bot.common.project import to_excel
-from cray_freelas_bot.domain.browser import IBrowser
+from cray_freelas_bot.common.project import create_browser_from_module
 from cray_freelas_bot.widgets.configuration_window import ConfigurationWindow
 from cray_freelas_bot.widgets.helpers import Button
 from cray_freelas_bot.widgets.threads import BrowserThread
@@ -20,7 +16,7 @@ class MainWindow(QtWidgets.QWidget):
         self.setWindowTitle('Tela Principal')
 
         self.browsers = []
-        self.browser_thread = BrowserThread(self.browsers)
+        self.browser_thread = BrowserThread(self)
 
         self.message_box = QtWidgets.QMessageBox()
         self.message_box.setWindowTitle('Aviso')
@@ -31,7 +27,7 @@ class MainWindow(QtWidgets.QWidget):
         self.configuration_button.clicked.connect(self.show_configuration)
 
         self.run_button = Button('Rodar')
-        self.run_button.clicked.connect(self.run)
+        self.run_button.clicked.connect(self.run_browsers)
 
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.addWidget(self.configuration_button)
@@ -42,23 +38,15 @@ class MainWindow(QtWidgets.QWidget):
         self.configuration_window.show()
 
     @QtCore.Slot()
-    def run(self) -> None:
-        try:
-            bots = json.load(open('.secrets.json'))['bots']
+    def run_browsers(self) -> None:
+        self.browsers = []
+        bots = json.load(open('.secrets.json'))['bots']
+        if bots:
             for bot in bots:
-                module = import_module(
-                    f'cray_freelas_bot.use_cases.{bot["website"]}'
-                )
-                browser = self.get_browser_from_module(module)
+                browser = create_browser_from_module(bot['website'])
                 browser.make_login(bot['username'], bot['password'])
-                to_excel([], Path(bot['report_folder']) / 'result.xlsx')
                 self.browsers.append(browser)
             self.browser_thread.start()
-        except KeyError:
+        else:
             self.message_box.setText('Crie primeiro os bots em Configurações')
             self.message_box.show()
-
-    def get_browser_from_module(self, module) -> IBrowser:
-        for _, obj in inspect.getmembers(module):
-            if obj in IBrowser.__subclasses__():
-                return obj()

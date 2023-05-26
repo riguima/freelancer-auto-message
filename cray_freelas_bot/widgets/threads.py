@@ -1,23 +1,22 @@
 import json
 from pathlib import Path
+from time import sleep
 
 import pandas as pd
-from PySide6 import QtCore
+from PySide6 import QtCore, QtWidgets
 
 from cray_freelas_bot.common.project import to_excel
-from cray_freelas_bot.domain.browser import IBrowser
 
 
 class BrowserThread(QtCore.QThread):
-    def __init__(self, browsers: list[IBrowser]) -> None:
+    def __init__(self, widget: QtWidgets.QWidget) -> None:
         super().__init__()
-        self.browsers = browsers
+        self.widget = widget
 
     def run(self) -> None:
         while True:
-            print('fskjfsl;')
             bots = json.load(open('.secrets.json'))['bots']
-            for browser, bot in zip(self.browsers, bots):
+            for browser, bot in zip(self.widget.browsers, bots):
                 report_path = Path(bot['report_folder']) / 'result.xlsx'
                 urls = pd.read_excel(report_path)['URL']
                 projects_urls = [
@@ -27,3 +26,4 @@ class BrowserThread(QtCore.QThread):
                     if project_url not in urls:
                         message = browser.send_message(project_url)
                         to_excel([message], report_path)
+            sleep(60)

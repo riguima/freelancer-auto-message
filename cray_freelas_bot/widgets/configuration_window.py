@@ -1,7 +1,9 @@
 import json
+from pathlib import Path
 
 from PySide6 import QtCore, QtWidgets
 
+from cray_freelas_bot.common.project import create_browser_from_module, to_excel
 from cray_freelas_bot.widgets.helpers import (
     Button,
     DirectoryDialog,
@@ -14,7 +16,7 @@ class ConfigurationWindow(QtWidgets.QWidget):
     def __init__(self, return_window: QtWidgets.QWidget) -> None:
         super().__init__()
         self.setStyleSheet('font-size: 20px;')
-        self.setFixedSize(700, 500)
+        self.setFixedSize(700, 600)
         self.setWindowTitle('Configurações')
 
         self.return_window = return_window
@@ -45,10 +47,19 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.website_label = QtWidgets.QLabel('Plataforma:')
         self.website_combobox = QtWidgets.QComboBox()
         self.website_combobox.addItems(list(self.WEBSITES.keys()))
+        self.website_combobox.currentIndexChanged.connect(self.set_categories)
         self.website_layout = HorizontalLayout(
             self.website_label,
             self.website_combobox,
         )
+
+        self.category_label = QtWidgets.QLabel('Categoria: ')
+        self.category_combobox = QtWidgets.QComboBox()
+        self.category_layout = HorizontalLayout(
+            self.category_label,
+            self.category_combobox,
+        )
+        self.set_categories()
 
         self.report_folder_label = QtWidgets.QLabel('Pasta do relatório:')
         self.report_folder_input = QtWidgets.QLineEdit()
@@ -76,17 +87,22 @@ class ConfigurationWindow(QtWidgets.QWidget):
                 list(self.WEBSITES.keys())[
                     list(self.WEBSITES.values()).index(b['website'])
                 ],
+                b['category'],
                 b['report_folder'],
             ]
             for b in bots
         ]
+        headers = [
+            'Usuario/Email',
+            'Senha',
+            'Plataforma',
+            'Categoria',
+            'Pasta do relatório',
+        ]
         if not data:
-            data = [''] * 4
+            data = [''] * len(headers)
         self.bot_table.setModel(
-            BotTableModel(
-                data,
-                ['Usuario/Email', 'Senha', 'Plataforma', 'Pasta do relatório'],
-            )
+            BotTableModel(data, headers)
         )
         self.bot_table.setColumnWidth(0, 300)
         self.bot_table.setColumnWidth(1, 150)
@@ -103,6 +119,7 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.layout.addLayout(self.username_layout)
         self.layout.addLayout(self.password_layout)
         self.layout.addLayout(self.website_layout)
+        self.layout.addLayout(self.category_layout)
         self.layout.addLayout(self.report_folder_layout)
         self.layout.addWidget(self.add_bot_button)
         self.layout.addWidget(self.bot_table)
@@ -115,16 +132,27 @@ class ConfigurationWindow(QtWidgets.QWidget):
         self.close()
 
     @QtCore.Slot()
+    def set_categories(self) -> None:
+        self.category_combobox.clear()
+        browser = create_browser_from_module(
+            self.WEBSITES[self.website_combobox.currentText()],
+            visible=False,
+        )
+        self.category_combobox.addItems(browser.get_all_categories())
+        browser.driver.close()
+
+    @QtCore.Slot()
     def add_bot(self) -> None:
         data = json.load(open('.secrets.json'))
-        data['bots'].append(
-            {
-                'username': self.username_input.text(),
-                'password': self.password_input.text(),
-                'website': self.WEBSITES[self.website_combobox.currentText()],
-                'report_folder': self.report_folder_input.text(),
-            }
-        )
+        bot = {
+            'username': self.username_input.text(),
+            'password': self.password_input.text(),
+            'website': self.WEBSITES[self.website_combobox.currentText()],
+            'category': self.category_combobox.currentText(),
+            'report_folder': self.report_folder_input.text(),
+        }
+        to_excel([], Path(bot['report_folder']) / 'result.xlsx')
+        data['bots'].append(bot)
         json.dump(data, open('.secrets.json', 'w'))
         self.message_box.setText('Bot adicionado')
         self.message_box.show()

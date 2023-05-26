@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from functools import cache
 
 from cray_freelas_bot.domain.models import Message, Project
 
@@ -107,6 +108,7 @@ class IBrowser(ABC):
         raise NotImplementedError()
 
     @abstractmethod
+    @cache
     def get_all_categories(self) -> list[str]:
         """
         Para obter todas as categorias disponiveis do site de freelancer, útil para fazer validação e filtros
