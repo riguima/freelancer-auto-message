@@ -1,5 +1,4 @@
 import json
-import re
 from datetime import datetime
 from random import randint
 
@@ -9,10 +8,7 @@ from selenium.webdriver import Chrome
 from cray_freelas_bot.common.driver import find_elements
 from cray_freelas_bot.common.project import get_greeting_according_time
 from cray_freelas_bot.domain.models import Project
-from cray_freelas_bot.exceptions.project import (
-    CategoryError,
-    ProjectError,
-)
+from cray_freelas_bot.exceptions.project import CategoryError, ProjectError
 from cray_freelas_bot.use_cases.nine_nine_freelas import NineNineBrowser
 
 
@@ -52,10 +48,7 @@ def test_get_project(browser: NineNineBrowser) -> None:
 
 
 def test_get_project_with_invalid_url(browser: NineNineBrowser) -> None:
-    with pytest.raises(
-        ProjectError,
-        match=re.compile(r'O projeto não existe'),
-    ):
+    with pytest.raises(ProjectError, match=r'O projeto não existe'):
         browser.get_project(
             'https://www.99freelas.com.br/project/trdial-4459?fs=t'
         )
@@ -64,9 +57,9 @@ def test_get_project_with_invalid_url(browser: NineNineBrowser) -> None:
 def test_get_project_with_unreleased_project(browser: NineNineBrowser) -> None:
     with pytest.raises(
         ProjectError,
-        re.compile(r'Projeto ainda não está disponivel para mandar mensagens'),
+        match=r'Projeto ainda não está disponivel para mandar mensagens',
     ):
-        url = browser.get_projects_urls('Engenharia & Arquitetura')[0].url
+        url = browser.get_projects_urls('Engenharia & Arquitetura')[0]
         browser.get_project(url)
 
 
@@ -82,20 +75,16 @@ def test_get_projects_urls_with_invalid_category(
     category = 'Limpeza'
     with pytest.raises(
         CategoryError,
-        re.compile(
-            (
-                r'Categoria inválida, utilize uma das seguintes: '
-                f'{browser.get_all_categories()}'
-            )
-        ),
+        match=r'Categoria inválida, utilize uma das seguintes: .*',
     ):
         browser.get_projects_urls(category, page=1)
 
 
 def test_send_message(driver: Chrome, browser: NineNineBrowser) -> None:
-    project = browser.get_projects_urls(
+    project_url = browser.get_projects_urls(
         'Web, Mobile & Software', page=randint(20, 30)
     )[randint(0, 9)]
+    project = browser.get_project(project_url)
     text = (
         f'{get_greeting_according_time(datetime.now().time())} '
         f'{project.client_name}, tudo bem?\n'

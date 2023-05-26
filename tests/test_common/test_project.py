@@ -3,6 +3,7 @@ from datetime import time
 import pandas as pd
 
 from cray_freelas_bot.common.project import (
+    create_browser_from_module,
     get_greeting_according_time,
     to_excel,
 )
@@ -50,3 +51,14 @@ def test_to_excel() -> None:
     assert pd.read_excel('tests/test_utils/expected_spreadsheet.xlsx').equals(
         df,
     )
+
+
+def test_create_browser_from_module() -> None:
+    browser_type = type(
+        create_browser_from_module(
+            'nine_nine_freelas',
+            user_data_dir='.default_user_data',
+            visible=False,
+        )
+    )
+    assert 'NineNineBrowser' in str(browser_type)
