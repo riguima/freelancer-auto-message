@@ -43,8 +43,11 @@ class MainWindow(QtWidgets.QWidget):
         bots = json.load(open('.secrets.json'))['bots']
         if bots:
             for bot in bots:
-                browser = create_browser_from_module(bot['website'])
-                browser.make_login(bot['username'], bot['password'])
+                browser = create_browser_from_module(
+                    bot['website'],
+                    user_data_dir=bot['user_data_dir'],
+                    visible=False,
+                )
                 self.browsers.append(browser)
             self.browser_thread.start()
         else:

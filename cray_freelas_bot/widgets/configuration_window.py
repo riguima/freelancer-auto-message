@@ -3,7 +3,10 @@ from pathlib import Path
 
 from PySide6 import QtCore, QtWidgets
 
-from cray_freelas_bot.common.project import create_browser_from_module, to_excel
+from cray_freelas_bot.common.project import (
+    create_browser_from_module,
+    to_excel,
+)
 from cray_freelas_bot.widgets.helpers import (
     Button,
     DirectoryDialog,
@@ -101,9 +104,7 @@ class ConfigurationWindow(QtWidgets.QWidget):
         ]
         if not data:
             data = [''] * len(headers)
-        self.bot_table.setModel(
-            BotTableModel(data, headers)
-        )
+        self.bot_table.setModel(BotTableModel(data, headers))
         self.bot_table.setColumnWidth(0, 300)
         self.bot_table.setColumnWidth(1, 150)
         self.bot_table.setColumnWidth(2, 150)
@@ -150,7 +151,16 @@ class ConfigurationWindow(QtWidgets.QWidget):
             'website': self.WEBSITES[self.website_combobox.currentText()],
             'category': self.category_combobox.currentText(),
             'report_folder': self.report_folder_input.text(),
+            'user_data_dir': (
+                f'{self.username_input.text().split("@")[0].replace(".", "_")}'
+                '_user_data'
+            ),
         }
+        browser = create_browser_from_module(
+            bot['website'],
+            user_data_dir=bot['user_data_dir'],
+        )
+        browser.make_login(bot['username'], bot['password'])
         to_excel([], Path(bot['report_folder']) / 'result.xlsx')
         data['bots'].append(bot)
         json.dump(data, open('.secrets.json', 'w'))
