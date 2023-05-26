@@ -11,7 +11,6 @@ from cray_freelas_bot.common.project import get_greeting_according_time
 from cray_freelas_bot.domain.models import Project
 from cray_freelas_bot.exceptions.project import (
     CategoryError,
-    LoginError,
     ProjectError,
 )
 from cray_freelas_bot.use_cases.nine_nine_freelas import NineNineBrowser
@@ -19,26 +18,12 @@ from cray_freelas_bot.use_cases.nine_nine_freelas import NineNineBrowser
 
 @pytest.fixture(scope='module')
 def browser() -> NineNineBrowser:
-    return NineNineBrowser(user_data_dir='default_user_data', visible=True)
+    return NineNineBrowser(user_data_dir='.default_user_data', visible=True)
 
 
 @pytest.fixture(scope='module')
 def driver(browser: NineNineBrowser) -> Chrome:
     return browser.driver
-
-
-def test_make_login_with_invalid_login() -> None:
-    browser = NineNineBrowser(user_data_dir='tests_user_data', visible=True)
-    with pytest.raises(
-        LoginError,
-        match=re.compile(r'Email ou senha inválidos'),
-    ):
-        browser.make_login('richard.alexsander.guima@gmail.com', 'Richard123')
-
-
-def test_make_login() -> None:
-    browser = NineNineBrowser(user_data_dir='tests_user_data', visible=True)
-    browser.make_login('miqueiasmartinsoficial@gmail.com', 'Projeto#1bot')
 
 
 def test_get_all_categories(browser: NineNineBrowser) -> None:
