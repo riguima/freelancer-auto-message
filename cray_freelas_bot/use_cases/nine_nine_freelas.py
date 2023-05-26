@@ -24,12 +24,13 @@ class NineNineBrowser(IBrowser):
     Implementação de IBrowser para o site 99Freelas, os métodos são os mesmos da interface, então o modo de uso será identico
     """
 
-    def __init__(self, visible: bool = True) -> None:
+    def __init__(self, user_data_dir: str, visible: bool = True) -> None:
         """
         Parameters:
+            user_data_dir: Caminho para pasta onde serão salvos os dados do navegador
             visible: Para mostrar ou não o navegador, por padrão é True, ou seja, mostra o navegador
         """
-        self.driver = create_driver(visible=visible)
+        self.driver = create_driver(user_data_dir, visible=visible)
 
     def make_login(self, username: str, password: str) -> None:
         self.driver.delete_all_cookies()

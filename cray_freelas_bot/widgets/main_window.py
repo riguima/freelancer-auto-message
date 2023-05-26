@@ -34,7 +34,7 @@ class MainWindow(QtWidgets.QWidget):
         self.layout.addWidget(self.run_button)
 
     @QtCore.Slot()
-    def show_bots(self) -> None:
+    def show_bots_window(self) -> None:
         self.bots_window.show()
 
     @QtCore.Slot()
@@ -46,7 +46,7 @@ class MainWindow(QtWidgets.QWidget):
                 browser = create_browser_from_module(
                     bot['website'],
                     user_data_dir=bot['user_data_dir'],
-                    visible=False,
+                    visible=True,
                 )
                 self.browsers.append(browser)
             self.browser_thread.start()

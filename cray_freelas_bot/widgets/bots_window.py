@@ -137,6 +137,7 @@ class BotsWindow(QtWidgets.QWidget):
         self.category_combobox.clear()
         browser = create_browser_from_module(
             self.WEBSITES[self.website_combobox.currentText()],
+            user_data_dir='default_user_data',
             visible=False,
         )
         self.category_combobox.addItems(browser.get_all_categories())
