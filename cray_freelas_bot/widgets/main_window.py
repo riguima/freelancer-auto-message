@@ -16,7 +16,7 @@ class MainWindow(QtWidgets.QWidget):
         self.setWindowTitle('Tela Principal')
 
         self.browsers = []
-        self.browser_thread = BrowserThread(self)
+        self.browser_thread = BrowserThread()
 
         self.message_box = QtWidgets.QMessageBox()
         self.message_box.setWindowTitle('Aviso')
@@ -42,13 +42,6 @@ class MainWindow(QtWidgets.QWidget):
         self.browsers = []
         bots = json.load(open('.secrets.json'))['bots']
         if bots:
-            for bot in bots:
-                browser = create_browser_from_module(
-                    bot['website'],
-                    user_data_dir=bot['user_data_dir'],
-                    visible=True,
-                )
-                self.browsers.append(browser)
             self.browser_thread.start()
         else:
             self.message_box.setText('Crie primeiro os bots')

@@ -71,23 +71,23 @@ def test_get_project_with_invalid_url(browser: NineNineBrowser) -> None:
 
 def test_get_project_with_unreleased_project(browser: NineNineBrowser) -> None:
     with pytest.raises(ProjectError) as error:
-        url = browser.get_projects('Engenharia & Arquitetura')[0].url
+        url = browser.get_projects_urls('Engenharia & Arquitetura')[0].url
         browser.get_project(url)
     assert error.value.args[0] == (
         'Projeto ainda não está disponivel para mandar mensagens'
     )
 
 
-def test_get_projects(browser: NineNineBrowser) -> None:
+def test_get_projects_urls(browser: NineNineBrowser) -> None:
     category = 'Engenharia & Arquitetura'
-    projects = browser.get_projects(category, page=4)
-    assert len(projects) == 10
+    urls = browser.get_projects_urls(category, page=4)
+    assert len(urls) == 10
 
 
-def test_get_projects_with_invalid_category(browser: NineNineBrowser) -> None:
+def test_get_projects_urls_with_invalid_category(browser: NineNineBrowser) -> None:
     category = 'Limpeza'
     with pytest.raises(CategoryError) as error:
-        browser.get_projects(category, page=1)
+        browser.get_projects_urls(category, page=1)
     assert error.value.args[0] == (
         'Categoria inválida, utilize uma das seguintes: '
         f'{browser.get_all_categories()}'
@@ -95,7 +95,7 @@ def test_get_projects_with_invalid_category(browser: NineNineBrowser) -> None:
 
 
 def test_send_message(driver: Chrome, browser: NineNineBrowser) -> None:
-    project = browser.get_projects(
+    project = browser.get_projects_urls(
         'Web, Mobile & Software', page=randint(20, 30)
     )[randint(0, 9)]
     text = (

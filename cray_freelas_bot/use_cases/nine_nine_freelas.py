@@ -68,25 +68,23 @@ class NineNineBrowser(IBrowser):
             )
         ]
 
-    def get_projects(
+    def get_projects_urls(
         self, category: str = 'Todas as categorias', page: int = 1
-    ) -> list[Project]:
+    ) -> list[str]:
         if category not in self.get_all_categories():
             raise CategoryError(
                 'Categoria inválida, utilize uma das seguintes: '
                 f'{self.get_all_categories()}'
             )
-        fixed_category = category.replace('&', 'e')
-        print(fixed_category)
+        category = category.replace('&', 'e')
         self.driver.get(
             f'https://www.99freelas.com.br/projects?order=mais-recentes'
-            f'&categoria={slugify(fixed_category)}&page={page}'
+            f'&categoria={slugify(category)}&page={page}'
         )
-        urls = [
+        return [
             link.get_attribute('href')
             for link in find_elements(self.driver, '.title a')
         ]
-        return [self.get_project(url) for url in urls]
 
     def get_project(self, url: str) -> Project:
         self.driver.get(url)

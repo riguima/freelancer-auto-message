@@ -30,28 +30,8 @@ class IBrowser(ABC):
         >>>     def get_all_categories(self) -> list[str]:
         >>>         return ['Web, Mobile & Software', 'Engenharia']
         >>>
-        >>>     def get_projects(self, category: str, page: int) -> list[Project]:
-        >>>         projects = [
-        >>>             Project(
-        >>>                 name='Projeto 1',
-        >>>                 category='Web, Mobile & Software',
-        >>>                 url='exampleurl.com.br',
-        >>>                 client_name='Rogerio',
-        >>>             ),
-        >>>             Project(
-        >>>                 name='Projeto 2',
-        >>>                 category='Engenharia',
-        >>>                 url='exampleurl2.com.br',
-        >>>                 client_name='Maria',
-        >>>             ),
-        >>>             Project(
-        >>>                 name='Projeto 3',
-        >>>                 category='Marketing',
-        >>>                 url='exampleurl3.com.br',
-        >>>                 client_name='Carlos',
-        >>>             ),
-        >>>         ]
-        >>>         return projects
+        >>>     def get_projects_urls(self, category: str, page: int) -> list[str]:
+        >>>         return ['url1.com.br', 'url2.com.br', 'url3.com.br']
     """
 
     @abstractmethod
@@ -126,14 +106,14 @@ class IBrowser(ABC):
         raise NotImplementedError()
 
     @abstractmethod
-    def get_projects(self, category: str, page: int = 1) -> list[Project]:
+    def get_projects_urls(self, category: str, page: int = 1) -> list[str]:
         """
-        Para obter todos os projetos de uma determinada categoria e de uma determinada página
+        Para obter as urls dos projetos de uma determinada categoria e de uma determinada página
         Parameters:
-            category: Uma string dizendo de qual categoria deve retornar projetos
-            page: Argumento opcional, de qual página do site de freelancers que deve retornar projetos, por padrão ele pega projetos da primeira página
+            category: Uma string dizendo de qual categoria deve retornar as urls
+            page: Argumento opcional, de qual página do site de freelancers que deve retornar as urls, por padrão ele pega urls da primeira página
         Returns:
-            Retorna uma lista de instâncias da classe Project, que são os projetos retornados de determinada categoria e de determinada página
+            Retorna uma lista de strings que são urls dos projetos de uma determinada página e de uma determinada categoria
         Examples:
             >>> from cray_freelas_bot.use_cases.nine_nine_freelas import NineNineBrowser
             >>> from cray_freelas_bot.common.driver import create_driver
@@ -141,7 +121,7 @@ class IBrowser(ABC):
             >>> driver = create_driver()
             >>> browser = NineNineBrowser(driver)
             >>> # Retorna os projetos da página 5
-            >>> browser.get_projects(category='Web, Mobile & Software', page=5)
-            [Project(name='Projeto 1', category='Web, Mobile & Software', url='exampleurl.com.br', client_name='Rogerio')]
+            >>> browser.get_projects_urls(category='Web, Mobile & Software', page=5)
+            ['exampleurl1.com.br', 'exampleurl2.com.br', 'exampleurl3.com.br']
         """
         raise NotImplementedError()
