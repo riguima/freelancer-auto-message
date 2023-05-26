@@ -15,12 +15,12 @@ from cray_freelas_bot.widgets.helpers import (
 from cray_freelas_bot.widgets.tables_models import BotTableModel
 
 
-class ConfigurationWindow(QtWidgets.QWidget):
+class BotsWindow(QtWidgets.QWidget):
     def __init__(self, return_window: QtWidgets.QWidget) -> None:
         super().__init__()
         self.setStyleSheet('font-size: 20px;')
         self.setFixedSize(700, 600)
-        self.setWindowTitle('Configurações')
+        self.setWindowTitle('Bots')
 
         self.return_window = return_window
 

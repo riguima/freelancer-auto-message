@@ -3,7 +3,7 @@ import json
 from PySide6 import QtCore, QtWidgets
 
 from cray_freelas_bot.common.project import create_browser_from_module
-from cray_freelas_bot.widgets.configuration_window import ConfigurationWindow
+from cray_freelas_bot.widgets.bots_window import BotsWindow
 from cray_freelas_bot.widgets.helpers import Button
 from cray_freelas_bot.widgets.threads import BrowserThread
 
@@ -21,21 +21,21 @@ class MainWindow(QtWidgets.QWidget):
         self.message_box = QtWidgets.QMessageBox()
         self.message_box.setWindowTitle('Aviso')
 
-        self.configuration_window = ConfigurationWindow(self)
+        self.bots_window = BotsWindow(self)
 
-        self.configuration_button = Button('Configurações')
-        self.configuration_button.clicked.connect(self.show_configuration)
+        self.bots_button = Button('Bots')
+        self.bots_button.clicked.connect(self.show_bots_window)
 
         self.run_button = Button('Rodar')
         self.run_button.clicked.connect(self.run_browsers)
 
         self.layout = QtWidgets.QVBoxLayout(self)
-        self.layout.addWidget(self.configuration_button)
+        self.layout.addWidget(self.bots_button)
         self.layout.addWidget(self.run_button)
 
     @QtCore.Slot()
-    def show_configuration(self) -> None:
-        self.configuration_window.show()
+    def show_bots(self) -> None:
+        self.bots_window.show()
 
     @QtCore.Slot()
     def run_browsers(self) -> None:
@@ -51,5 +51,5 @@ class MainWindow(QtWidgets.QWidget):
                 self.browsers.append(browser)
             self.browser_thread.start()
         else:
-            self.message_box.setText('Crie primeiro os bots em Configurações')
+            self.message_box.setText('Crie primeiro os bots')
             self.message_box.show()
