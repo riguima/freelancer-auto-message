@@ -84,7 +84,9 @@ def test_get_projects_urls(browser: NineNineBrowser) -> None:
     assert len(urls) == 10
 
 
-def test_get_projects_urls_with_invalid_category(browser: NineNineBrowser) -> None:
+def test_get_projects_urls_with_invalid_category(
+    browser: NineNineBrowser,
+) -> None:
     category = 'Limpeza'
     with pytest.raises(CategoryError) as error:
         browser.get_projects_urls(category, page=1)
