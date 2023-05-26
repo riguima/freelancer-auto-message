@@ -1,3 +1,4 @@
+import os
 from datetime import time
 
 import pandas as pd
@@ -47,10 +48,26 @@ def test_to_excel() -> None:
             text='Mensagem de exemplo 3',
         ),
     ]
-    df = to_excel(messages, 'tests/test_utils/result.xlsx')
+    path = 'tests/test_utils/result.xlsx'
+    os.remove(path)
+    df = to_excel(messages, path)
     assert pd.read_excel('tests/test_utils/expected_spreadsheet.xlsx').equals(
         df,
     )
+
+
+def test_to_excel_append_message() -> None:
+    message = Message(
+        Project(
+            name='Projeto 4',
+            client_name='Cliente 4',
+            category='Web, Mobile & Software',
+            url='url 4',
+        ),
+        text='Mensagem de exemplo 4',
+    )
+    df = to_excel([message], 'tests/test_utils/result.xlsx')
+    assert len(df) == 4
 
 
 def test_create_browser_from_module() -> None:

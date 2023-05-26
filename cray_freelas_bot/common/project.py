@@ -1,6 +1,7 @@
 import inspect
 from datetime import time
 from importlib import import_module
+from pathlib import Path
 
 import pandas as pd
 
@@ -35,7 +36,7 @@ def get_greeting_according_time(greeting_time: time) -> str:
 
 def to_excel(messages: list[Message], path: str) -> pd.DataFrame:
     """
-    Exporta mensagens para uma planilha em Excel
+    Exporta mensagens para uma planilha em Excel, se a planilha existir, adiciona novas mensagens a planilha existente
     Parameters:
         messages: A lista de mensagens que serão adicionadas a planilha, são instâncias da classe Message
         path: Caminho para o arquivo com o resultado, tem que ser com extensão .xlsx
@@ -57,15 +58,18 @@ def to_excel(messages: list[Message], path: str) -> pd.DataFrame:
         ]
         >>> to_excel(messages, 'result.xlsx')
     """
-    df = pd.DataFrame(
-        columns=[
-            'Nome do projeto',
-            'Nome do cliente',
-            'Mensagem',
-            'Categoria',
-            'URL',
-        ]
-    )
+    if Path(path).exists():
+        df = pd.read_excel(path)
+    else:
+        df = pd.DataFrame(
+            columns=[
+                'Nome do projeto',
+                'Nome do cliente',
+                'Mensagem',
+                'Categoria',
+                'URL',
+            ]
+        )
     for message in messages:
         df.loc[len(df)] = [
             message.project.name,
