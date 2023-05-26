@@ -12,6 +12,7 @@ from cray_freelas_bot.common.project import (
     to_excel,
 )
 from cray_freelas_bot.domain.browser import IBrowser
+from cray_freelas_bot.exceptions.project import ProjectError
 
 
 class BrowserThread(QtCore.QThread):
@@ -25,7 +26,10 @@ class BrowserThread(QtCore.QThread):
                 projects_urls = browser.get_projects_urls(bot['category'])
                 for project_url in projects_urls:
                     if project_url not in urls:
-                        project = browser.get_project(project_url)
+                        try:
+                            project = browser.get_project(project_url)
+                        except ProjectError:
+                            continue
                         greeting = get_greeting_according_time(
                             datetime.now().time()
                         )
