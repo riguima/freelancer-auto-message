@@ -63,7 +63,7 @@ def test_get_project_with_unreleased_project(browser: NineNineBrowser) -> None:
         ProjectError,
         match=r'Projeto ainda não está disponivel para mandar mensagens',
     ):
-        url = browser.get_projects_urls('Engenharia & Arquitetura')[0]
+        url = browser.get_projects_urls('Web, Mobile & Software')[0]
         browser.get_project(url)
 
 
