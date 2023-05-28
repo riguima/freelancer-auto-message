@@ -104,8 +104,8 @@ def test_send_message(driver: Chrome, browser: NineNineBrowser) -> None:
     )
     try:
         message = browser.send_message(project.url, text)
-    except SendMessageErro:
-        assert True
+    except SendMessageError:
+        return
     driver.get('https://www.99freelas.com.br/messages/inbox')
     assert (
         find_elements(driver, '.message-text:not(.empty)')[-1].text

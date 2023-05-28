@@ -34,7 +34,6 @@ class NineNineBrowser(IBrowser):
         self.driver = create_driver(user_data_dir, visible=visible)
 
     def make_login(self, username: str, password: str) -> None:
-        self.driver.delete_all_cookies()
         self.driver.get('https://www.99freelas.com.br/login')
         find_element(self.driver, '#email').send_keys(username)
         find_element(self.driver, '#senha').send_keys(password)
@@ -51,7 +50,9 @@ class NineNineBrowser(IBrowser):
                 break
 
     def is_logged(self) -> bool:
-        self.driver.get('https://www.99freelas.com.br/login')
+        url = 'https://www.99freelas.com.br/login'
+        if self.driver.current_url != url:
+            self.driver.get(url)
         try:
             find_element(self.driver, '.user-name')
         except TimeoutException:
@@ -116,6 +117,8 @@ class NineNineBrowser(IBrowser):
         try:
             find_element(self.driver, '#mensagem-pergunta').send_keys(message)
         except TimeoutException:
-            raise SendMessageError('Projeto não disponivel para envio de mensagens')
+            raise SendMessageError(
+                'Projeto não disponivel para envio de mensagens'
+            )
         click(self.driver, '#btnEnviarPergunta')
         return Message(project=self.get_project(project_url), text=message)
