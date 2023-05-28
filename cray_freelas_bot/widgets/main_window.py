@@ -1,8 +1,6 @@
-import json
-
 from PySide6 import QtCore, QtWidgets
 
-from cray_freelas_bot.common.project import create_browser_from_module
+from cray_freelas_bot.common.project import get_bots
 from cray_freelas_bot.widgets.bots_window import BotsWindow
 from cray_freelas_bot.widgets.helpers import Button
 from cray_freelas_bot.widgets.threads import BrowserThread
@@ -41,7 +39,7 @@ class MainWindow(QtWidgets.QWidget):
     @QtCore.Slot()
     def run_browsers(self) -> None:
         self.browsers = []
-        bots = json.load(open('.secrets.json'))['bots']
+        bots = get_bots()
         if bots:
             self.browser_thread.start()
         else:

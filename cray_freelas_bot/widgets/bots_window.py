@@ -2,7 +2,10 @@ import json
 
 from PySide6 import QtCore, QtWidgets
 
-from cray_freelas_bot.common.project import create_browser_from_module
+from cray_freelas_bot.common.project import (
+    create_browser_from_module,
+    get_bots,
+)
 from cray_freelas_bot.widgets.helpers import (
     Button,
     DirectoryDialog,
@@ -112,10 +115,10 @@ class BotsWindow(QtWidgets.QWidget):
 
     def update_bot_table_data(self) -> None:
         try:
-            bots = json.load(open('.secrets.json'))['bots']
+            bots = get_bots()
         except FileNotFoundError:
             bots = []
-            json.dump({'bots': []}, open('.secrets.json', 'w'))
+            json.dump({'bots': []}, open('.bots.json', 'w'))
         data = [
             [
                 b['username'],
@@ -172,9 +175,10 @@ class BotsWindow(QtWidgets.QWidget):
     @QtCore.Slot()
     def remove_bot(self) -> None:
         for index in self.bot_table.selectedIndexes():
-            data = json.load(open('.secrets.json'))
-            data['bots'].pop(index.row())
-            json.dump(data, open('.secrets.json', 'w'))
+            bots = get_bots()
+            bots.pop(index.row())
+            data = {'bots': bots}
+            json.dump(data, open('.bots.json', 'w'))
         self.update_bot_table_data()
 
     def clear_inputs(self) -> None:
