@@ -23,6 +23,7 @@ pytest = "^7.3.1"
 pytest-cov = "^4.0.0"
 taskipy = "^1.11.0"
 ipython = "^8.13.2"
+pytest-qt = "^4.2.0"
 
 [tool.poetry.group.docs.dependencies]
 mkdocstrings-python = "^1.0.0"
