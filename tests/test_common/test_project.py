@@ -1,10 +1,13 @@
+import json
 import os
 from datetime import time
+from pathlib import Path
 
 import pandas as pd
 
 from cray_freelas_bot.common.project import (
     create_browser_from_module,
+    get_bots,
     get_greeting_according_time,
     to_excel,
 )
@@ -79,3 +82,23 @@ def test_create_browser_from_module() -> None:
         )
     )
     assert 'NineNineBrowser' in str(browser_type)
+
+
+def test_get_bots_without_bots_json() -> None:
+    if Path('.bots.json').exists():
+        os.remove('.bots.json')
+    assert get_bots() == []
+
+
+def test_get_bots() -> None:
+    expected_bot = {
+        'username': 'richard@gmail.com',
+        'password': 'Richard123',
+        'website': 'nine_nine_freelas',
+        'category': 'Web, Mobile & Software',
+        'report_folder': '/home/riguima/Downloads',
+        'user_data_dir': '.richard_user_data',
+        'message': 'Mensagem de teste',
+    }
+    json.dump({'bots': [expected_bot]}, open('.bots.json', 'w'))
+    assert get_bots()[0] == expected_bot
