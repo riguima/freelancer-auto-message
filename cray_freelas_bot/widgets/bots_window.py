@@ -16,7 +16,6 @@ class BotsWindow(QtWidgets.QWidget):
     def __init__(self, return_window: QtWidgets.QWidget) -> None:
         super().__init__()
         self.setStyleSheet('font-size: 20px;')
-        self.setFixedSize(700, 600)
         self.setWindowTitle('Bots')
 
         self.return_window = return_window
@@ -73,6 +72,9 @@ class BotsWindow(QtWidgets.QWidget):
         self.report_folder_layout.addWidget(self.report_folder_label)
         self.report_folder_layout.addLayout(self.report_folder_dialog)
 
+        self.message_label = QtWidgets.QLabel('Mensagem:')
+        self.message_text_edit = QtWidgets.QTextEdit()
+
         self.create_bot_button = Button('Adicionar bot')
         self.create_bot_button.clicked.connect(self.create_bot)
 
@@ -89,16 +91,24 @@ class BotsWindow(QtWidgets.QWidget):
         self.return_button = Button('Voltar')
         self.return_button.clicked.connect(self.return_to_window)
 
-        self.layout = QtWidgets.QVBoxLayout(self)
-        self.layout.addLayout(self.username_layout)
-        self.layout.addLayout(self.password_layout)
-        self.layout.addLayout(self.website_layout)
-        self.layout.addLayout(self.category_layout)
-        self.layout.addLayout(self.report_folder_layout)
-        self.layout.addWidget(self.create_bot_button)
-        self.layout.addWidget(self.bot_table)
-        self.layout.addWidget(self.remove_bot_button)
-        self.layout.addWidget(self.return_button)
+        self.inputs_layout = QtWidgets.QVBoxLayout()
+        self.inputs_layout.addLayout(self.username_layout)
+        self.inputs_layout.addLayout(self.password_layout)
+        self.inputs_layout.addLayout(self.website_layout)
+        self.inputs_layout.addLayout(self.category_layout)
+        self.inputs_layout.addLayout(self.report_folder_layout)
+        self.inputs_layout.addWidget(self.message_label)
+        self.inputs_layout.addWidget(self.message_text_edit)
+        self.inputs_layout.addWidget(self.create_bot_button)
+        self.inputs_layout.addWidget(self.return_button)
+
+        self.bot_table_layout = QtWidgets.QVBoxLayout()
+        self.bot_table_layout.addWidget(self.bot_table)
+        self.bot_table_layout.addWidget(self.remove_bot_button)
+
+        self.layout = QtWidgets.QHBoxLayout(self)
+        self.layout.addLayout(self.inputs_layout)
+        self.layout.addLayout(self.bot_table_layout)
 
     def update_bot_table_data(self) -> None:
         try:
