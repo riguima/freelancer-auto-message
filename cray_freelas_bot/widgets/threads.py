@@ -12,15 +12,18 @@ from cray_freelas_bot.common.project import (
     to_excel,
 )
 from cray_freelas_bot.domain.browser import IBrowser
+from cray_freelas_bot.domain.models import Project
 from cray_freelas_bot.exceptions.project import ProjectError
 
 
 class BrowserThread(QtCore.QThread):
+    def __init__(self) -> None:
+        self.browsers = self.create_browsers()
+
     def run(self) -> None:
-        browsers = self.create_browsers()
         while True:
             bots = json.load(open('.secrets.json'))['bots']
-            for browser, bot in zip(browsers, bots):
+            for browser, bot in zip(self.browsers, bots):
                 report_path = Path(bot['report_folder']) / 'result.xlsx'
                 urls = pd.read_excel(report_path)['URL']
                 projects_urls = browser.get_projects_urls(bot['category'])
@@ -30,19 +33,8 @@ class BrowserThread(QtCore.QThread):
                             project = browser.get_project(project_url)
                         except ProjectError:
                             continue
-                        greeting = get_greeting_according_time(
-                            datetime.now().time()
-                        )
-                        text = (
-                            f'{greeting} {{b}}{project.client_name}{{/b}}, '
-                            f'tudo bem?\n\n Ao ler sobre o seu projeto '
-                            f'{{b}}"{project.name}"{{/b}}, percebi que ele '
-                            'está alinhado com a minha expertise em '
-                            f'{project.category}, gostaria de saber qual o '
-                            'seu prazo ideal para a conclusão do projeto e se '
-                            'você possui algum detalhe em específico que '
-                            'considera fundamental?\n\n'
-                            f'ass: {{b}}{browser.get_account_name()}{{/b}}'
+                        text = self.get_browser_message_text(
+                            self.browsers.index(browser), project
                         )
                         message = browser.send_message(text, project_url)
                         to_excel([message], report_path)
@@ -59,6 +51,21 @@ class BrowserThread(QtCore.QThread):
             )
             result.append(browser)
         return result
+
+    def get_browser_message_text(
+        self, browser_index: int, project: Project
+    ) -> list[str]:
+        browser = self.browsers[browser_index]
+        text = get_bots()[browser_index]['message']
+        greeting = get_greeting_according_time(
+            datetime.now().time()
+        )
+        text.replace('{saudação}', greeting)
+        text.replace('{nome do cliente}', project.client_name)
+        text.replace('{nome do projeto}', project.name)
+        text.replace('{categoria}', project.category)
+        text.replace('{nome da conta}', browser.get_account_name())
+        return text
 
 
 class CreateBotThread(QtCore.QThread):
@@ -82,6 +89,7 @@ class CreateBotThread(QtCore.QThread):
             'category': self.widget.category_combobox.currentText(),
             'report_folder': self.widget.report_folder_input.text(),
             'user_data_dir': f'.{username}_user_data',
+            'message': self.widget.message_text_edit.toPlainText(),
         }
         browser = create_browser_from_module(
             bot['website'],
