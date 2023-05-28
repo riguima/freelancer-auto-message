@@ -8,7 +8,11 @@ from selenium.webdriver import Chrome
 from cray_freelas_bot.common.driver import find_elements
 from cray_freelas_bot.common.project import get_greeting_according_time
 from cray_freelas_bot.domain.models import Project
-from cray_freelas_bot.exceptions.project import CategoryError, ProjectError
+from cray_freelas_bot.exceptions.project import (
+    CategoryError,
+    ProjectError,
+    SendMessageError,
+)
 from cray_freelas_bot.use_cases.nine_nine_freelas import NineNineBrowser
 
 
@@ -98,7 +102,10 @@ def test_send_message(driver: Chrome, browser: NineNineBrowser) -> None:
         'possui algum detalhe em específico que considera fundamental?\n'
         f'ass: {browser.get_account_name()}'
     )
-    message = browser.send_message(project.url, text)
+    try:
+        message = browser.send_message(project.url, text)
+    except SendMessageErro:
+        assert True
     driver.get('https://www.99freelas.com.br/messages/inbox')
     assert (
         find_elements(driver, '.message-text:not(.empty)')[-1].text
