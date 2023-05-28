@@ -23,8 +23,7 @@ class BrowserThread(QtCore.QThread):
 
     def run(self) -> None:
         while True:
-            bots = json.load(open('.secrets.json'))['bots']
-            for browser, bot in zip(self.browsers, bots):
+            for browser, bot in zip(self.browsers, get_bots()):
                 report_path = Path(bot['report_folder']) / 'result.xlsx'
                 urls = pd.read_excel(report_path)['URL']
                 projects_urls = browser.get_projects_urls(bot['category'])
@@ -43,12 +42,11 @@ class BrowserThread(QtCore.QThread):
 
     def create_browsers(self) -> list[IBrowser]:
         result = []
-        bots = json.load(open('.secrets.json'))['bots']
-        for bot in bots:
+        for bot in get_bots():
             browser = create_browser_from_module(
                 bot['website'],
                 user_data_dir=bot['user_data_dir'],
-                visible=True,
+                visible=False,
             )
             result.append(browser)
         return result
@@ -58,9 +56,7 @@ class BrowserThread(QtCore.QThread):
     ) -> list[str]:
         browser = self.browsers[browser_index]
         text = get_bots()[browser_index]['message']
-        greeting = get_greeting_according_time(
-            datetime.now().time()
-        )
+        greeting = get_greeting_according_time(datetime.now().time())
         text.replace('{saudação}', greeting)
         text.replace('{nome do cliente}', project.client_name)
         text.replace('{nome do projeto}', project.name)
@@ -77,9 +73,9 @@ class CreateBotThread(QtCore.QThread):
         self.widget = widget
 
     def run(self) -> None:
-        data = json.load(open('.secrets.json'))
-        username = self.widget.username_input.text().split("@")[0].replace(
-            ".", "_"
+        bots = get_bots()
+        username = (
+            self.widget.username_input.text().split('@')[0].replace('.', '_')
         )
         bot = {
             'username': self.widget.username_input.text(),
@@ -98,7 +94,6 @@ class CreateBotThread(QtCore.QThread):
         )
         if not browser.is_logged():
             browser.make_login(bot['username'], bot['password'])
-        to_excel([], Path(bot['report_folder']) / 'result.xlsx')
-        data['bots'].append(bot)
-        json.dump(data, open('.secrets.json', 'w'))
+        bots.append(bot)
+        json.dump({'bots': bots}, open('.secrets.json', 'w'))
         self.finished.emit()
