@@ -22,6 +22,10 @@ def driver(browser: NineNineBrowser) -> Chrome:
     return browser.driver
 
 
+def test_is_logged(browser: NineNineBrowser) -> None:
+    assert browser.is_logged()
+
+
 def test_get_all_categories(browser: NineNineBrowser) -> None:
     expected = json.load(
         open('tests/test_utils/nine_nine_categories.json', 'r')
