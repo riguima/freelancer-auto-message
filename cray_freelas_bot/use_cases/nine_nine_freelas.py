@@ -37,10 +37,8 @@ class NineNineBrowser(IBrowser):
         self.driver.get('https://www.99freelas.com.br/login')
         find_element(self.driver, '#email').send_keys(username)
         find_element(self.driver, '#senha').send_keys(password)
-        for i in range(5):
-            try:
-                find_element(self.driver, '.user-name')
-            except TimeoutException:
+        while True:
+            if not self.is_logged():
                 errors_messages = self.driver.find_elements(
                     By.CSS_SELECTOR, '.general-error-msg'
                 )
@@ -49,10 +47,14 @@ class NineNineBrowser(IBrowser):
                 ):
                     raise LoginError('Email ou senha inválidos')
             else:
-                return
-        raise LoginError(
-            'Erro ao fazer login, você deve preencher o captcha para logar'
-        )
+                break
+
+    def is_logged(self) -> bool:
+        try:
+            find_element(self.driver, '.user-name')
+        except TimeoutException:
+            return False
+        return True
 
     def get_account_name(self) -> str:
         self.driver.get('https://www.99freelas.com.br/dashboard')

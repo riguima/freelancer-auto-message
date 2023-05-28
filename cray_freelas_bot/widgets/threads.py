@@ -8,6 +8,7 @@ from PySide6 import QtCore, QtWidgets
 
 from cray_freelas_bot.common.project import (
     create_browser_from_module,
+    get_bots,
     get_greeting_according_time,
     to_excel,
 )
@@ -95,7 +96,8 @@ class CreateBotThread(QtCore.QThread):
             bot['website'],
             user_data_dir=bot['user_data_dir'],
         )
-        browser.make_login(bot['username'], bot['password'])
+        if not browser.is_logged():
+            browser.make_login(bot['username'], bot['password'])
         to_excel([], Path(bot['report_folder']) / 'result.xlsx')
         data['bots'].append(bot)
         json.dump(data, open('.secrets.json', 'w'))
