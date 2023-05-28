@@ -50,6 +50,7 @@ class NineNineBrowser(IBrowser):
                 break
 
     def is_logged(self) -> bool:
+        self.driver.get('https://www.99freelas.com.br/login')
         try:
             find_element(self.driver, '.user-name')
         except TimeoutException:
