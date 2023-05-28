@@ -1,6 +1,6 @@
 import inspect
-from datetime import time
 import json
+from datetime import time
 from importlib import import_module
 from pathlib import Path
 
@@ -101,4 +101,6 @@ def get_bots() -> list[dict]:
         >>> get_bots()
         [{"username": "usuario@gmail.com", "password": "senha123", "website": "nine_nine_freelas", "category": "Web, Mobile & Software", "report_folder": "~/Downloads", "user_data_dir": ".usuario_user_data", "message": "Mensagem de exemplo"}]
     """
+    if not Path('.bots.json').exists():
+        json.dump({'bots': []}, open('.bots.json', 'w'))
     return json.load(open('.bots.json'))['bots']
