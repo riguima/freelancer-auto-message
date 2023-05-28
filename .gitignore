@@ -1,6 +1,7 @@
 # Project
 *.docx
-.secrets.json
+.bots.json
+*result.xlsx
 *user_data
 
 # Byte-compiled / optimized / DLL files
