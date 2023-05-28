@@ -16,6 +16,7 @@ from cray_freelas_bot.exceptions.project import (
     CategoryError,
     LoginError,
     ProjectError,
+    SendMessageError,
 )
 
 
@@ -112,6 +113,9 @@ class NineNineBrowser(IBrowser):
         self.driver.get(
             find_element(self.driver, '.txt-duvidas a').get_attribute('href')
         )
-        find_element(self.driver, '#mensagem-pergunta').send_keys(message)
+        try:
+            find_element(self.driver, '#mensagem-pergunta').send_keys(message)
+        except TimeoutException:
+            raise SendMessageError('Projeto não disponivel para envio de mensagens')
         click(self.driver, '#btnEnviarPergunta')
         return Message(project=self.get_project(project_url), text=message)

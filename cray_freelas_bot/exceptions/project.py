@@ -8,3 +8,7 @@ class ProjectError(Exception):
 
 class LoginError(Exception):
     pass
+
+
+class SendMessageError(Exception):
+    pass
