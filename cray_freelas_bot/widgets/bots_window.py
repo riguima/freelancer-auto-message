@@ -114,11 +114,7 @@ class BotsWindow(QtWidgets.QWidget):
         self.layout.addLayout(self.bot_table_layout)
 
     def update_bot_table_data(self) -> None:
-        try:
-            bots = get_bots()
-        except FileNotFoundError:
-            bots = []
-            json.dump({'bots': []}, open('.bots.json', 'w'))
+        bots = get_bots()
         data = [
             [
                 b['username'],
