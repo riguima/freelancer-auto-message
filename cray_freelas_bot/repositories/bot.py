@@ -1,4 +1,4 @@
-from sqlalchemy.orm import select
+from sqlalchemy import select
 
 from cray_freelas_bot.common.project import create_browser_from_module
 from cray_freelas_bot.domain.bot import Bot
