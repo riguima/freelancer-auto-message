@@ -1,2 +1,2 @@
-class ConfigError(Exception):
+class BotsError(Exception):
     pass
