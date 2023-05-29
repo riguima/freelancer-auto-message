@@ -1,3 +1,4 @@
+from datetime import datetime
 from functools import cache
 
 from selenium.common.exceptions import TimeoutException
@@ -10,6 +11,7 @@ from cray_freelas_bot.common.driver import (
     find_element,
     find_elements,
 )
+from cray_freelas_bot.common.project import get_greeting_according_time
 from cray_freelas_bot.domain.browser import IBrowser
 from cray_freelas_bot.domain.models import Message, Project
 from cray_freelas_bot.exceptions.project import (
@@ -121,4 +123,16 @@ class NineNineBrowser(IBrowser):
                 'Projeto não disponivel para envio de mensagens'
             )
         click(self.driver, '#btnEnviarPergunta')
-        return Message(project=self.get_project(project_url), text=message)
+        return Message(
+            project=self.get_project(project_url),
+            text=self.format_message(message),
+        )
+
+    def format_message(self, message: str, project: Project) -> str:
+        greeting = get_greeting_according_time(datetime.now().time())
+        message.replace('{saudação}', greeting)
+        message.replace('{nome do cliente}', project.client_name)
+        message.replace('{nome do projeto}', project.name)
+        message.replace('{categoria}', project.category)
+        message.replace('{nome da conta}', self.get_account_name())
+        return message
