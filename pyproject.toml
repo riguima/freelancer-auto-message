@@ -15,6 +15,7 @@ openpyxl = "^3.1.2"
 python-slugify = "^8.0.1"
 pyside6 = "^6.5.0"
 rocketry = "^2.5.1"
+sqlalchemy = "^2.0.15"
 
 [tool.poetry.group.dev.dependencies]
 blue = "^0.9.1"
@@ -46,4 +47,3 @@ line_length = 79
 lint = "blue --check --diff . && isort --check --diff ."
 pre_test = "task lint"
 test = "pytest -s -x --cov=cray_freelas_bot -vv"
-post_test = "coverage html"
