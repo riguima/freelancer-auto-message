@@ -4,6 +4,7 @@
 *result.xlsx
 *user_data
 .vim
+database.db
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

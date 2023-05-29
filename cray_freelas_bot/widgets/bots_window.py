@@ -1,11 +1,7 @@
-import json
-
 from PySide6 import QtCore, QtWidgets
 
-from cray_freelas_bot.common.project import (
-    create_browser_from_module,
-    get_bots,
-)
+from cray_freelas_bot.common.project import create_browser_from_module
+from cray_freelas_bot.repositories.bot import BotRepository
 from cray_freelas_bot.widgets.helpers import (
     Button,
     DirectoryDialog,
@@ -42,11 +38,6 @@ class BotsWindow(QtWidgets.QWidget):
             self.password_label,
             self.password_input,
         )
-
-        self.WEBSITES = {
-            '99Freelas': 'nine_nine_freelas',
-            'Workana': 'workana',
-        }
 
         self.website_label = QtWidgets.QLabel('Plataforma:')
         self.website_combobox = QtWidgets.QComboBox()
@@ -114,16 +105,14 @@ class BotsWindow(QtWidgets.QWidget):
         self.layout.addLayout(self.bot_table_layout)
 
     def update_bot_table_data(self) -> None:
-        bots = get_bots()
+        bots = BotRepository().all()
         data = [
             [
-                b['username'],
-                b['password'],
-                list(self.WEBSITES.keys())[
-                    list(self.WEBSITES.values()).index(b['website'])
-                ],
-                b['category'],
-                b['report_folder'],
+                b.username,
+                b.password,
+                b.browser_module,
+                b.category,
+                b.report_folder,
             ]
             for b in bots
         ]
@@ -171,10 +160,7 @@ class BotsWindow(QtWidgets.QWidget):
     @QtCore.Slot()
     def remove_bot(self) -> None:
         for index in self.bot_table.selectedIndexes():
-            bots = get_bots()
-            bots.pop(index.row())
-            data = {'bots': bots}
-            json.dump(data, open('.bots.json', 'w'))
+            BotRepository().delete(self.bot_table.model().get_id(index))
         self.update_bot_table_data()
 
     def clear_inputs(self) -> None:

@@ -8,4 +8,4 @@ load_dotenv()
 
 
 db = create_engine(os.getenv('SQLALCHEMY_DATABASE_URI'))
-Sesssion = sessionmaker(db)
+Session = sessionmaker(db)

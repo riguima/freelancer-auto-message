@@ -7,6 +7,10 @@ class BotTableModel(QtCore.QAbstractTableModel):
         self._data = data
         self._header = header
 
+    def get_id(self, index, role=QtCore.Qt.ItemDataRole.DisplayRole):
+        if role == QtCore.Qt.ItemDataRole.DisplayRole:
+            return self._data[index.row()][0]
+
     def data(self, index, role=QtCore.Qt.ItemDataRole.DisplayRole):
         if role == QtCore.Qt.ItemDataRole.DisplayRole:
             return self._data[index.row()][index.column()]

@@ -11,3 +11,6 @@ class IRepository(ABC):
     @abstractmethod
     def all(self) -> list[Bot]:
         raise NotImplementedError()
+
+    def delete(self, id: int) -> None:
+        raise NotImplementedError()
