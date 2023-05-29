@@ -41,7 +41,7 @@ class BotsWindow(QtWidgets.QWidget):
 
         self.browser_module_label = QtWidgets.QLabel('Plataforma:')
         self.browser_module_combobox = QtWidgets.QComboBox()
-        self.browser_module_combobox.addItems(['99 Freelas', 'Workana'])
+        self.browser_module_combobox.addItems(['99Freelas', 'Workana'])
         self.browser_module_combobox.currentIndexChanged.connect(
             self.set_categories
         )
@@ -148,10 +148,15 @@ class BotsWindow(QtWidgets.QWidget):
 
     @QtCore.Slot()
     def create_bot(self) -> None:
-        self.message_box.setText('Faça o login')
-        self.message_box.show()
-        self.create_bot_thread.start()
-        self.create_bot_thread.finished.connect(self.show_created_bot_message)
+        if len(self.message_text_edit.toPlainText()) < 100:
+            self.message_box.setText(
+                'A mensagem precisa ter pelo menos 100 caracteres'
+            )
+        else:
+            self.message_box.setText('Faça o login')
+            self.message_box.show()
+            self.create_bot_thread.start()
+            self.create_bot_thread.finished.connect(self.show_created_bot_message)
 
     @QtCore.Slot()
     def show_created_bot_message(self) -> None:
