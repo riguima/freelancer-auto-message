@@ -1,5 +1,4 @@
 import inspect
-import json
 from datetime import time
 from importlib import import_module
 from pathlib import Path
@@ -88,19 +87,3 @@ def create_browser_from_module(module_name: str, *args, **kwargs) -> IBrowser:
     for _, obj in inspect.getmembers(module):
         if obj in IBrowser.__subclasses__():
             return obj(*args, **kwargs)
-
-
-def get_bots() -> list[dict]:
-    """
-    Retorna a lista dos bots criados
-    Returns:
-        Uma lista com os bots criados
-    Examples:
-        >>> from cray_freelas_bot.common.project import get_bots()
-        >>>
-        >>> get_bots()
-        [{"username": "usuario@gmail.com", "password": "senha123", "website": "nine_nine_freelas", "category": "Web, Mobile & Software", "report_folder": "~/Downloads", "user_data_dir": ".usuario_user_data", "message": "Mensagem de exemplo"}]
-    """
-    if not Path('.bots.json').exists():
-        json.dump({'bots': []}, open('.bots.json', 'w'))
-    return json.load(open('.bots.json'))['bots']
