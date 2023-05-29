@@ -39,13 +39,15 @@ class BotsWindow(QtWidgets.QWidget):
             self.password_input,
         )
 
-        self.website_label = QtWidgets.QLabel('Plataforma:')
-        self.website_combobox = QtWidgets.QComboBox()
-        self.website_combobox.addItems(list(self.WEBSITES.keys()))
-        self.website_combobox.currentIndexChanged.connect(self.set_categories)
-        self.website_layout = HorizontalLayout(
-            self.website_label,
-            self.website_combobox,
+        self.browser_module_label = QtWidgets.QLabel('Plataforma:')
+        self.browser_module_combobox = QtWidgets.QComboBox()
+        self.browser_module_combobox.addItems(['99 Freelas', 'Workana'])
+        self.browser_module_combobox.currentIndexChanged.connect(
+            self.set_categories
+        )
+        self.browser_module_layout = HorizontalLayout(
+            self.browser_module_label,
+            self.browser_module_combobox,
         )
 
         self.category_label = QtWidgets.QLabel('Categoria: ')
@@ -54,7 +56,7 @@ class BotsWindow(QtWidgets.QWidget):
             self.category_label,
             self.category_combobox,
         )
-        self.set_categories()
+        self.set_categories(self.category_combobox.currentIndex())
 
         self.report_folder_label = QtWidgets.QLabel('Pasta do relatório:')
         self.report_folder_input = QtWidgets.QLineEdit()
@@ -88,7 +90,7 @@ class BotsWindow(QtWidgets.QWidget):
         self.inputs_layout = QtWidgets.QVBoxLayout()
         self.inputs_layout.addLayout(self.username_layout)
         self.inputs_layout.addLayout(self.password_layout)
-        self.inputs_layout.addLayout(self.website_layout)
+        self.inputs_layout.addLayout(self.browser_module_layout)
         self.inputs_layout.addLayout(self.category_layout)
         self.inputs_layout.addLayout(self.report_folder_layout)
         self.inputs_layout.addWidget(self.message_label)
@@ -133,11 +135,12 @@ class BotsWindow(QtWidgets.QWidget):
         self.close()
 
     @QtCore.Slot()
-    def set_categories(self) -> None:
+    def set_categories(self, index: int) -> None:
         self.category_combobox.clear()
+        browsers_modules = ['nine_nine_freelas', 'workana']
         browser = create_browser_from_module(
-            self.WEBSITES[self.website_combobox.currentText()],
-            user_data_dir='default_user_data',
+            browsers_modules[index],
+            user_data_dir='.default_user_data',
             visible=False,
         )
         self.category_combobox.addItems(browser.get_all_categories())

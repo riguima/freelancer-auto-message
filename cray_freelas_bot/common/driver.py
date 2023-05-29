@@ -7,7 +7,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-def create_driver(user_data_dir: str, visible: bool = False) -> Chrome:
+def create_driver(user_data_dir: str = None, visible: bool = False) -> Chrome:
     """
     Cria um driver do Google Chrome do selenium
     Parameters:
@@ -17,7 +17,8 @@ def create_driver(user_data_dir: str, visible: bool = False) -> Chrome:
         Retorna uma instância do driver Chrome do selenium
     """
     options = Options()
-    options.add_argument(f'user-data-dir={user_data_dir}')
+    if user_data_dir is not None:
+        options.add_argument(f'user-data-dir={user_data_dir}')
     if not visible:
         options.add_argument('--headless')
         options.add_argument('--no-sandbox')

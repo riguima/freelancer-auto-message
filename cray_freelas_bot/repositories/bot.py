@@ -1,9 +1,9 @@
 from sqlalchemy import select
 
 from cray_freelas_bot.common.project import create_browser_from_module
+from cray_freelas_bot.database import Session
 from cray_freelas_bot.domain.bot import Bot
 from cray_freelas_bot.domain.repositories import IRepository
-from cray_freelas_bot.database import Session
 from cray_freelas_bot.models.bot import BotModel
 
 

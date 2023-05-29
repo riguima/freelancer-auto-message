@@ -8,7 +8,7 @@ from cray_freelas_bot.use_cases.workana import WorkanaBrowser
 
 @pytest.fixture(scope='module')
 def browser() -> WorkanaBrowser:
-    return WorkanaBrowser(user_data_dir='.make_login_user_data', visible=True)
+    return WorkanaBrowser(visible=True)
 
 
 def test_is_logged_without_make_login(browser: WorkanaBrowser) -> None:
@@ -24,4 +24,4 @@ def test_make_login_with_invalid_login(browser: WorkanaBrowser) -> None:
 
 
 def test_make_login(browser: WorkanaBrowser) -> None:
-    browser.make_login('miqueiasmartinsoficial@gmail.com', 'Projeto#1bot')
+    browser.make_login('craybrasil@gmail.com', 'Projeto#1bot')

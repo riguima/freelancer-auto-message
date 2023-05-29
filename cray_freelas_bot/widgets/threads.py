@@ -2,18 +2,14 @@ from time import sleep
 
 from PySide6 import QtCore, QtWidgets
 
-from cray_freelas_bot.common.project import (
-    create_browser_from_module,
-    get_bots,
-)
-from cray_freelas_bot.domain.models import Bot
+from cray_freelas_bot.domain.bot import Bot
 from cray_freelas_bot.repositories.bot import BotRepository
 
 
 class BrowserThread(QtCore.QThread):
     def run(self) -> None:
         while True:
-            for bot in get_bots():
+            for bot in BotRepository().all():
                 bot.run()
             sleep(60)
 
@@ -34,11 +30,12 @@ class CreateBotThread(QtCore.QThread):
         username = (
             self.widget.username_input.text().split('@')[0].replace('.', '_')
         )
+        browsers_modules = ['nine_nine_freelas', 'workana']
         return Bot(
             username=self.widget.username_input.text(),
             password=self.widget.password_input.text(),
-            browser_module=self.widget.WEBSITES[
-                self.widget.website_combobox.currentText()
+            browser_module=browsers_modules[
+                self.widget.browser_module_combobox.currentIndex()
             ],
             category=self.widget.category_combobox.currentText(),
             report_folder=self.widget.report_folder_input.text(),

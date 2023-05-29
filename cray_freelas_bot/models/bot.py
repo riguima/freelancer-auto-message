@@ -1,7 +1,6 @@
-from sqlalchemy.orm import declarative_base, Mapped, mapped_column
+from sqlalchemy.orm import Mapped, declarative_base, mapped_column
 
 from cray_freelas_bot.database import db
-
 
 Base = declarative_base()
 

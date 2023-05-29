@@ -123,9 +123,10 @@ class NineNineBrowser(IBrowser):
                 'Projeto não disponivel para envio de mensagens'
             )
         click(self.driver, '#btnEnviarPergunta')
+        project = self.get_project(project_url)
         return Message(
-            project=self.get_project(project_url),
-            text=self.format_message(message),
+            project=project,
+            text=self.format_message(message, project),
         )
 
     def format_message(self, message: str, project: Project) -> str:

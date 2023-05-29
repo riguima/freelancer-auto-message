@@ -8,11 +8,7 @@ from selenium.webdriver import Chrome
 from cray_freelas_bot.common.driver import find_elements
 from cray_freelas_bot.common.project import get_greeting_according_time
 from cray_freelas_bot.domain.models import Project
-from cray_freelas_bot.exceptions.project import (
-    CategoryError,
-    ProjectError,
-    SendMessageError,
-)
+from cray_freelas_bot.exceptions.project import CategoryError, ProjectError
 from cray_freelas_bot.use_cases.workana import WorkanaBrowser
 
 
@@ -31,25 +27,20 @@ def test_is_logged(browser: WorkanaBrowser) -> None:
 
 
 def test_get_all_categories(browser: WorkanaBrowser) -> None:
-    expected = json.load(
-        open('tests/test_utils/nine_nine_categories.json', 'r')
-    )
+    expected = json.load(open('tests/test_utils/workana_categories.json', 'r'))
     assert browser.get_all_categories() == expected
 
 
 def test_get_account_name(browser: WorkanaBrowser) -> None:
-    assert browser.get_account_name() == 'Miqueias Martin'
+    assert browser.get_account_name() == 'Miquéias Martins - Cray Brasil'
 
 
 def test_get_project(browser: WorkanaBrowser) -> None:
-    url = (
-        'https://www.99freelas.com.br/project/'
-        'transformar-loja-em-casa-residencial-437559?fs=t'
-    )
+    url = 'https://www.workana.com/job/configuracao-de-site-37?ref=projects_1'
     expected = Project(
-        category='Engenharia & Arquitetura',
-        client_name='Emerson L.',
-        name='Transformar loja em casa residencial',
+        category='TI e Programação',
+        client_name='C. C.',
+        name='Configuração de site',
         url=url,
     )
     assert browser.get_project(url) == expected
@@ -58,23 +49,14 @@ def test_get_project(browser: WorkanaBrowser) -> None:
 def test_get_project_with_invalid_url(browser: WorkanaBrowser) -> None:
     with pytest.raises(ProjectError, match=r'O projeto não existe'):
         browser.get_project(
-            'https://www.99freelas.com.br/project/trdial-4459?fs=t'
+            'https://www.workana.com/job/fsfddsfpdfafsdlfjfacebook'
         )
 
 
-def test_get_project_with_unreleased_project(browser: WorkanaBrowser) -> None:
-    with pytest.raises(
-        ProjectError,
-        match=r'Projeto ainda não está disponivel para mandar mensagens',
-    ):
-        url = browser.get_projects_urls('Web, Mobile & Software')[0]
-        browser.get_project(url)
-
-
 def test_get_projects_urls(browser: WorkanaBrowser) -> None:
-    category = 'Engenharia & Arquitetura'
+    category = 'Marketing e Vendas'
     urls = browser.get_projects_urls(category, page=4)
-    assert len(urls) == 10
+    assert len(urls) == 22
 
 
 def test_get_projects_urls_with_invalid_category(
@@ -90,7 +72,7 @@ def test_get_projects_urls_with_invalid_category(
 
 def test_send_message(driver: Chrome, browser: WorkanaBrowser) -> None:
     project_url = browser.get_projects_urls(
-        'Web, Mobile & Software', page=randint(20, 30)
+        'TI e Programação', page=randint(20, 30)
     )[randint(0, 9)]
     project = browser.get_project(project_url)
     text = (
@@ -102,12 +84,12 @@ def test_send_message(driver: Chrome, browser: WorkanaBrowser) -> None:
         'possui algum detalhe em específico que considera fundamental?\n'
         f'ass: {browser.get_account_name()}'
     )
-    try:
-        message = browser.send_message(project.url, text)
-    except SendMessageError:
-        return
-    driver.get('https://www.99freelas.com.br/messages/inbox')
+    message = browser.send_message(project.url, text)
+    driver.get('https://www.workana.com/dashboard')
     assert (
-        find_elements(driver, '.message-text:not(.empty)')[-1].text
-        == message.text
+        find_elements(driver, '.list-notifications .notification-desc')[0]
+        .get_attribute('textContent')
+        .replace('\r', '')
+        .replace('...', '')
+        in message.text
     )
