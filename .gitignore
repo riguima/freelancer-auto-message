@@ -3,6 +3,7 @@
 .bots.json
 *result.xlsx
 *user_data
+.vim
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
