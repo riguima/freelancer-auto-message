@@ -131,9 +131,9 @@ class NineNineBrowser(IBrowser):
 
     def format_message(self, message: str, project: Project) -> str:
         greeting = get_greeting_according_time(datetime.now().time())
-        message.replace('{saudação}', greeting)
-        message.replace('{nome do cliente}', project.client_name)
-        message.replace('{nome do projeto}', project.name)
-        message.replace('{categoria}', project.category)
-        message.replace('{nome da conta}', self.get_account_name())
+        message = message.replace('{saudação}', greeting)
+        message = message.replace('{nome do cliente}', project.client_name)
+        message = message.replace('{nome do projeto}', project.name)
+        message = message.replace('{categoria}', project.category)
+        message = message.replace('{nome da conta}', self.get_account_name())
         return message

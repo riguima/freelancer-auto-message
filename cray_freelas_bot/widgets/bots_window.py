@@ -112,7 +112,6 @@ class BotsWindow(QtWidgets.QWidget):
             [
                 b.username,
                 b.password,
-                b.browser_module,
                 b.category,
                 b.report_folder,
             ]
@@ -121,7 +120,6 @@ class BotsWindow(QtWidgets.QWidget):
         headers = [
             'Usuario/Email',
             'Senha',
-            'Plataforma',
             'Categoria',
             'Pasta do relatório',
         ]

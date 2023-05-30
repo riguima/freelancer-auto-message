@@ -18,7 +18,8 @@ def create_driver(user_data_dir: str = None, visible: bool = False) -> Chrome:
     """
     options = Options()
     if user_data_dir is not None:
-        options.add_argument(f'user-data-dir={user_data_dir}')
+        options.add_argument(f'--user-data-dir=C:\\Users\\User\\Desktop\\cray-freelas-bot\\{user_data_dir}')
+        #options.add_argument(f'--user-data-dir=.\\{user_data_dir}')
     if not visible:
         options.add_argument('--headless')
         options.add_argument('--no-sandbox')

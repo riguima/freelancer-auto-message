@@ -17,7 +17,7 @@ class BotRepository(IRepository):
                 category=data.category,
                 message=data.message,
                 user_data_dir=data.user_data_dir,
-                browser=data.browser_module,
+                browser_module=data.browser_module,
             )
             session.add(model)
             session.commit()
