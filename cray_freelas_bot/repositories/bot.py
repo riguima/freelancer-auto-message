@@ -44,5 +44,5 @@ class BotRepository(IRepository):
             category=model.category,
             message=model.message,
             user_data_dir=model.user_data_dir,
-            browser=create_browser_from_module(model.browser_module),
+            browser=create_browser_from_module(model.browser_module, user_data_dir=model.user_data_dir),
         )
