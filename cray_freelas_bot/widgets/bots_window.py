@@ -1,6 +1,6 @@
 from PySide6 import QtCore, QtWidgets
 
-from cray_freelas_bot.common.project import create_browser_from_module
+from cray_freelas_bot.common.browser import create_browser_from_module
 from cray_freelas_bot.repositories.bot import BotRepository
 from cray_freelas_bot.widgets.helpers import (
     Button,
@@ -56,7 +56,7 @@ class BotsWindow(QtWidgets.QWidget):
             self.category_label,
             self.category_combobox,
         )
-        self.set_categories(self.category_combobox.currentIndex())
+        self.set_categories(0)
 
         self.report_folder_label = QtWidgets.QLabel('Pasta do relatório:')
         self.report_folder_input = QtWidgets.QLineEdit()
@@ -139,11 +139,7 @@ class BotsWindow(QtWidgets.QWidget):
     def set_categories(self, index: int) -> None:
         self.category_combobox.clear()
         browsers_modules = ['nine_nine_freelas', 'workana']
-        browser = create_browser_from_module(
-            browsers_modules[index],
-            user_data_dir='.default_user_data',
-            visible=False,
-        )
+        browser = create_browser_from_module(browsers_modules[index])
         self.category_combobox.addItems(browser.get_all_categories())
         browser.driver.close()
 
@@ -154,17 +150,19 @@ class BotsWindow(QtWidgets.QWidget):
                 'A mensagem precisa ter pelo menos 100 caracteres'
             )
         else:
-            self.message_box.setText('Faça o login')
+            self.message_box.setText('Adicionando bot...')
             self.message_box.show()
             self.create_bot_thread.start()
-            self.create_bot_thread.finished.connect(self.show_created_bot_message)
+            self.create_bot_thread.finished.connect(
+                self.show_created_bot_message
+            )
 
     @QtCore.Slot()
     def show_created_bot_message(self) -> None:
-        self.message_box.setText('Bot adicionado')
-        self.message_box.show()
         self.clear_inputs()
         self.update_bot_table_data()
+        self.message_box.setText('Bot adicionado')
+        self.message_box.show()
 
     @QtCore.Slot()
     def remove_bot(self) -> None:

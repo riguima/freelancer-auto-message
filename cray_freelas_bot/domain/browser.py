@@ -1,6 +1,9 @@
 from abc import ABC, abstractmethod
+from datetime import datetime
 from functools import cache
 
+from cray_freelas_bot.common.driver import create_driver
+from cray_freelas_bot.common.project import get_greeting_according_time
 from cray_freelas_bot.domain.models import Message, Project
 
 
@@ -8,6 +11,19 @@ class IBrowser(ABC):
     """
     Interface para implementação de novos bots para outras plataformas, as classes que implementam essa interface devem conter os mesmos métodos
     """
+
+    def __init__(
+        self, user_data_dir: str = '.default_user_data', visible: bool = False
+    ) -> None:
+        """
+        Parameters:
+            user_data_dir: Caminho para pasta onde serão salvos os dados do navegador
+            visible: Para mostrar ou não o navegador, por padrão é True, ou seja, mostra o navegador
+        """
+        self.driver = create_driver(
+            user_data_dir=user_data_dir,
+            visible=visible,
+        )
 
     @abstractmethod
     def make_login(self, username: str, password: str) -> None:
@@ -119,3 +135,12 @@ class IBrowser(ABC):
             Uma instância da classe Project referente ao projeto da url passada como parâmetro
         """
         raise NotImplementedError()
+
+    def format_message(self, message: str, project: Project) -> str:
+        greeting = get_greeting_according_time(datetime.now().time())
+        message = message.replace('{saudação}', greeting)
+        message = message.replace('{nome do cliente}', project.client_name)
+        message = message.replace('{nome do projeto}', project.name)
+        message = message.replace('{categoria}', project.category)
+        message = message.replace('{nome da conta}', self.get_account_name())
+        return message

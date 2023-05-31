@@ -19,7 +19,6 @@ def test_show_bots_window(qtbot, main_window: MainWindow) -> None:
 
 def test_run_without_bots(qtbot, main_window: MainWindow) -> None:
     qtbot.addWidget(main_window)
-    os.remove('.bots.json')
     qtbot.mouseClick(main_window.run_button, QtCore.Qt.LeftButton)
     assert main_window.message_box.text() == 'Crie primeiro os bots'
 

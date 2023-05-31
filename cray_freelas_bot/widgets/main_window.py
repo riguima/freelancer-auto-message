@@ -13,7 +13,6 @@ class MainWindow(QtWidgets.QWidget):
         self.setFixedSize(200, 100)
         self.setWindowTitle('Tela Principal')
 
-        self.browsers = []
         self.browser_thread = BrowserThread()
 
         self.message_box = QtWidgets.QMessageBox()
@@ -38,9 +37,9 @@ class MainWindow(QtWidgets.QWidget):
 
     @QtCore.Slot()
     def run_browsers(self) -> None:
-        self.browsers = []
-        bots = BotRepository().all()
-        if bots:
+        if BotRepository().all():
+            self.message_box.setText('Executando tarefa...')
+            self.message_box.show()
             self.browser_thread.start()
         else:
             self.message_box.setText('Crie primeiro os bots')

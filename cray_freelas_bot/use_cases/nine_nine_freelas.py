@@ -1,17 +1,10 @@
-from datetime import datetime
 from functools import cache
 
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from slugify import slugify
 
-from cray_freelas_bot.common.driver import (
-    click,
-    create_driver,
-    find_element,
-    find_elements,
-)
-from cray_freelas_bot.common.project import get_greeting_according_time
+from cray_freelas_bot.common.driver import click, find_element, find_elements
 from cray_freelas_bot.domain.browser import IBrowser
 from cray_freelas_bot.domain.models import Message, Project
 from cray_freelas_bot.exceptions.project import (
@@ -26,14 +19,6 @@ class NineNineBrowser(IBrowser):
     """
     Implementação de IBrowser para o site 99Freelas, os métodos são os mesmos da interface, então o modo de uso será identico
     """
-
-    def __init__(self, user_data_dir: str = None, visible: bool = True) -> None:
-        """
-        Parameters:
-            user_data_dir: Caminho para pasta onde serão salvos os dados do navegador
-            visible: Para mostrar ou não o navegador, por padrão é True, ou seja, mostra o navegador
-        """
-        self.driver = create_driver(user_data_dir, visible=visible)
 
     def __str__(self) -> str:
         return 'nine_nine_freelas'
@@ -131,12 +116,3 @@ class NineNineBrowser(IBrowser):
             project=project,
             text=self.format_message(message, project),
         )
-
-    def format_message(self, message: str, project: Project) -> str:
-        greeting = get_greeting_according_time(datetime.now().time())
-        message = message.replace('{saudação}', greeting)
-        message = message.replace('{nome do cliente}', project.client_name)
-        message = message.replace('{nome do projeto}', project.name)
-        message = message.replace('{categoria}', project.category)
-        message = message.replace('{nome da conta}', self.get_account_name())
-        return message

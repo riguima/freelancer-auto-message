@@ -1,13 +1,9 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-import pandas as pd
 from selenium.common.exceptions import TimeoutException
 
-from cray_freelas_bot.common.project import (
-    create_browser_from_module,
-    to_excel,
-)
+from cray_freelas_bot.common.project import to_excel
 from cray_freelas_bot.domain.browser import IBrowser
 from cray_freelas_bot.exceptions.project import ProjectError
 

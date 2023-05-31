@@ -1,11 +1,8 @@
-import inspect
 from datetime import time
-from importlib import import_module
 from pathlib import Path
 
 import pandas as pd
 
-from cray_freelas_bot.domain.browser import IBrowser
 from cray_freelas_bot.domain.models import Message
 
 
@@ -80,10 +77,3 @@ def to_excel(messages: list[Message], path: str) -> pd.DataFrame:
         ]
     df.to_excel(path, index=False)
     return df
-
-
-def create_browser_from_module(module_name: str, *args, **kwargs) -> IBrowser:
-    module = import_module(f'cray_freelas_bot.use_cases.{module_name}')
-    for _, obj in inspect.getmembers(module):
-        if obj in IBrowser.__subclasses__():
-            return obj(*args, **kwargs)
