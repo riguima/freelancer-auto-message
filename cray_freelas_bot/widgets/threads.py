@@ -9,8 +9,9 @@ from cray_freelas_bot.repositories.bot import BotRepository
 
 class BrowserThread(QtCore.QThread):
     def run(self) -> None:
+        bots = BotRepository().all()
         while True:
-            for bot in BotRepository().all():
+            for bot in bots:
                 bot.run()
             sleep(60)
 
