@@ -36,6 +36,9 @@ class WorkanaBrowser(IBrowser):
         """
         self.driver = create_driver(user_data_dir=user_data_dir, visible=visible)
 
+    def __str__(self) -> str:
+        return 'workana'
+
     def make_login(self, username: str, password: str) -> None:
         self.driver.get('https://www.workana.com/login')
         find_element(self.driver, 'input[name=email]').send_keys(username)

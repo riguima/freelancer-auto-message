@@ -17,7 +17,7 @@ class BotRepository(IRepository):
                 category=data.category,
                 message=data.message,
                 user_data_dir=data.user_data_dir,
-                browser_module=data.browser_module,
+                browser_module=str(data.browser),
             )
             session.add(model)
             session.commit()
@@ -37,6 +37,7 @@ class BotRepository(IRepository):
 
     def to_dataclass(self, model: BotModel) -> Bot:
         return Bot(
+            id=model.id,
             username=model.username,
             password=model.password,
             report_folder=model.report_folder,

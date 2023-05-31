@@ -21,11 +21,11 @@ class Bot:
     message: str
     user_data_dir: str
     browser: IBrowser
+    id: int = None
 
     def run(self) -> None:
         if not self.browser.is_logged():
             self.browser.make_login(self.username, self.password)
-        breakpoint()
         for url in self.get_valid_projects_urls():
             try:
                 self.send_message(url)

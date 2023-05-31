@@ -2,6 +2,7 @@ from time import sleep
 
 from PySide6 import QtCore, QtWidgets
 
+from cray_freelas_bot.common.project import create_browser_from_module
 from cray_freelas_bot.domain.bot import Bot
 from cray_freelas_bot.repositories.bot import BotRepository
 
@@ -34,9 +35,11 @@ class CreateBotThread(QtCore.QThread):
         return Bot(
             username=self.widget.username_input.text(),
             password=self.widget.password_input.text(),
-            browser_module=browsers_modules[
-                self.widget.browser_module_combobox.currentIndex()
-            ],
+            browser=create_browser_from_module(
+                browsers_modules[self.widget.browser_module_combobox.currentIndex()],
+                user_data_dir=f'.{username}_user_data',
+                visible=True,
+            ),
             category=self.widget.category_combobox.currentText(),
             report_folder=self.widget.report_folder_input.text(),
             user_data_dir=f'.{username}_user_data',

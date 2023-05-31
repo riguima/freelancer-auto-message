@@ -76,10 +76,11 @@ class BotsWindow(QtWidgets.QWidget):
 
         self.bot_table = QtWidgets.QTableView()
         self.update_bot_table_data()
-        self.bot_table.setColumnWidth(0, 300)
-        self.bot_table.setColumnWidth(1, 150)
+        self.bot_table.setColumnHidden(0, True)
+        self.bot_table.setColumnWidth(1, 300)
         self.bot_table.setColumnWidth(2, 150)
-        self.bot_table.setColumnWidth(3, 300)
+        self.bot_table.setColumnWidth(3, 150)
+        self.bot_table.setColumnWidth(4, 300)
 
         self.remove_bot_button = Button('Remover bot')
         self.remove_bot_button.clicked.connect(self.remove_bot)
@@ -110,6 +111,7 @@ class BotsWindow(QtWidgets.QWidget):
         bots = BotRepository().all()
         data = [
             [
+                b.id,
                 b.username,
                 b.password,
                 b.category,
@@ -118,6 +120,7 @@ class BotsWindow(QtWidgets.QWidget):
             for b in bots
         ]
         headers = [
+            'ID',
             'Usuario/Email',
             'Senha',
             'Categoria',
