@@ -10,7 +10,7 @@ Instale os pacotes necessários com `pip install -r requirements.txt`
 
 Rode o arquivo `main.py`, essa interface vai se abrir
 
-![Janela principal](https://www.github.com/riguima/cray-freelas-bot/docs/assets/main-window.png)
+![Janela principal](https://github.com/riguima/cray-freelas-bot/blob/main/docs/assets/main-window.png)
 
 Clicando em rodar ele rodar o processo para todos os bots que foram criados, os bots
 ficam monitorando por projetos novos para mandar mensagens a cada 10 minutos,
@@ -21,7 +21,7 @@ na plataforma, mas isso só será necessário na primeira vez que rodar o bot
 
 Clique em Bots, uma janela para criação e remoção de bots vai se abrir
 
-![Janela Bots](https://www.github.com/riguima/cray-freelas-bot/docs/assets/bots-window.png)
+![Janela Bots](https://github.com/riguima/cray-freelas-bot/blob/main/docs/assets/bots-window.png)
 
 Aqui poderá adicionar novos bots preenchendo os campos e clicando em "Adicionar bot"
 
