@@ -1,4 +1,5 @@
 from functools import cache
+from time import sleep
 
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
@@ -101,6 +102,7 @@ class NineNineBrowser(IBrowser):
 
     def send_message(self, project_url: str, message: str) -> Message:
         self.driver.get(project_url)
+        sleep(5)
         self.driver.get(
             find_element(self.driver, '.txt-duvidas a').get_attribute('href')
         )
