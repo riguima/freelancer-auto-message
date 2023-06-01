@@ -1,4 +1,4 @@
-from threading import Thread
+from time import sleep
 
 from pathlib import Path
 from PySide6 import QtCore, QtWidgets
@@ -27,14 +27,13 @@ class BrowserThread(QtCore.QThread):
         ]
         while True:
             for bot, browser in zip(bots, browsers):
-                if browser == browsers[-1]:
-                    self.run_bot(bot, browser)
-                else:
-                    Thread(target=self.run_bot, args=[bot, browser]).start()
+                self.run_bot(bot, browser)
+            sleep(60 * 10)
 
     def run_bot(self, bot: Bot, browser: IBrowser) -> None:
         if not browser.is_logged():
             browser.make_login(bot.username, bot.password)
+        breakpoint()
         for url in self.get_valid_projects_urls(bot, browser):
             try:
                 self.send_message(bot, browser, url)
