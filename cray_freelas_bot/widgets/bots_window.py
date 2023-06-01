@@ -151,6 +151,7 @@ class BotsWindow(QtWidgets.QWidget):
             self.message_box.setText(
                 'A mensagem precisa ter pelo menos 100 caracteres'
             )
+            self.message_box.show()
         else:
             self.message_box.setText('Adicionando bot...')
             self.message_box.show()
@@ -161,16 +162,18 @@ class BotsWindow(QtWidgets.QWidget):
 
     @QtCore.Slot()
     def show_created_bot_message(self) -> None:
-        self.clear_inputs()
-        self.update_bot_table_data()
         self.message_box.setText('Bot adicionado')
         self.message_box.show()
+        self.clear_inputs()
+        self.update_bot_table_data()
 
     @QtCore.Slot()
     def remove_bot(self) -> None:
         for index in self.bot_table.selectedIndexes():
             BotRepository().delete(self.bot_table.model().get_id(index))
         self.update_bot_table_data()
+        self.message_box.setText('Bot removido')
+        self.message_box.show()
 
     def clear_inputs(self) -> None:
         widgets_inputs = [

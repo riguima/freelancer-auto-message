@@ -17,13 +17,20 @@ from cray_freelas_bot.repositories.message_sent import MessageSentRepository
 class BrowserThread(QtCore.QThread):
     def run(self) -> None:
         bots = BotRepository().all()
+        browsers = [
+            create_browser_from_module(
+                bot.browser_module,
+                user_data_dir=bot.user_data_dir,
+                visible=True,
+            )
+            for bot in bots
+        ]
         while True:
-            for bot in bots:
+            for bot, browser in zip(bots, browsers):
                 self.run_bot(bot)
             sleep(60)
 
-    def run_bot(self, bot: Bot) -> None:
-        browser = create_browser_from_module(bot.browser_module)
+    def run_bot(self, bot: Bot, browser: IBrowser) -> None:
         if not browser.is_logged():
             browser.make_login(bot.username, bot.password)
         breakpoint()

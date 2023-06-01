@@ -16,13 +16,13 @@ class MessageSentRepository(IRepository):
 
     def all(self) -> list[MessageSent]:
         with Session() as session:
-            query = select(MessageSent)
+            query = select(MessageSentModel)
             models = session.execute(query).scalars().all()
             return [self.to_dataclass(m) for m in models]
 
     def delete(self, id: int) -> None:
         with Session() as session:
-            model = session.get(id)
+            model = session.get(MessageSentModel, id)
             if model:
                 session.delete(model)
                 session.commit()

@@ -17,6 +17,7 @@ pyside6 = "^6.5.0"
 rocketry = "^2.5.1"
 sqlalchemy = "^2.0.15"
 ipython = "^8.13.2"
+pyreadline = "^2.1"
 
 [tool.poetry.group.dev.dependencies]
 blue = "^0.9.1"
