@@ -116,6 +116,7 @@ class BotsWindow(QtWidgets.QWidget):
                 b.password,
                 b.category,
                 b.report_folder,
+                b.browser_module,
             ]
             for b in bots
         ]
@@ -125,6 +126,7 @@ class BotsWindow(QtWidgets.QWidget):
             'Senha',
             'Categoria',
             'Pasta do relatório',
+            'Plataforma',
         ]
         if not data:
             data = [''] * len(headers)

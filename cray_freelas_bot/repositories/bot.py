@@ -1,6 +1,5 @@
 from sqlalchemy import select
 
-from cray_freelas_bot.common.browser import create_browser_from_module
 from cray_freelas_bot.database import Session
 from cray_freelas_bot.domain.bot import Bot
 from cray_freelas_bot.domain.repositories import IRepository
@@ -17,7 +16,7 @@ class BotRepository(IRepository):
                 category=data.category,
                 message=data.message,
                 user_data_dir=data.user_data_dir,
-                browser_module=str(data.browser),
+                browser_module=data.browser_module,
             )
             session.add(model)
             session.commit()
@@ -45,9 +44,5 @@ class BotRepository(IRepository):
             category=model.category,
             message=model.message,
             user_data_dir=model.user_data_dir,
-            browser=create_browser_from_module(
-                model.browser_module,
-                user_data_dir=model.user_data_dir,
-                visible=True,
-            ),
+            browser_module=model.browser_module,
         )
