@@ -1,3 +1,4 @@
+from threading import Thread
 from time import sleep
 
 from pathlib import Path
@@ -27,8 +28,10 @@ class BrowserThread(QtCore.QThread):
         ]
         while True:
             for bot, browser in zip(bots, browsers):
-                self.run_bot(bot)
-            sleep(60)
+                if browser == browsers[-1]:
+                    self.run_bot(bot, browser)
+                else:
+                    Thread(target=self.run_bot, args=[bot, browser]).start()
 
     def run_bot(self, bot: Bot, browser: IBrowser) -> None:
         if not browser.is_logged():
@@ -45,13 +48,14 @@ class BrowserThread(QtCore.QThread):
     ) -> list[str]:
         result = []
         urls = [m.url for m in MessageSentRepository().all()]
-        for url in browser.get_projects_urls(bot.category):
-            if url not in urls:
-                try:
-                    browser.get_project(url)
-                except ProjectError:
-                    continue
-                result.append(url)
+        for page in range(10):
+            for url in browser.get_projects_urls(bot.category, page=page + 1):
+                if url not in urls:
+                    try:
+                        browser.get_project(url)
+                    except ProjectError:
+                        continue
+                    result.append(url)
         return result
 
     def send_message(
