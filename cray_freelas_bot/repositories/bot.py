@@ -32,8 +32,9 @@ class BotRepository(IRepository):
     def delete(self, id: int) -> None:
         with Session() as session:
             model = session.get(BotModel, id)
-            session.delete(model)
-            session.commit()
+            if model:
+                session.delete(model)
+                session.commit()
 
     def to_dataclass(self, model: BotModel) -> Bot:
         return Bot(
