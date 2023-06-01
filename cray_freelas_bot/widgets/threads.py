@@ -45,7 +45,10 @@ class BrowserThread(QtCore.QThread):
         self, bot: Bot, browser: IBrowser
     ) -> list[str]:
         result = []
-        urls = [m.url for m in MessageSentRepository().all()]
+        urls = [
+            m.url for m in MessageSentRepository().all()
+            if m.account_name == browser.get_account_name()
+        ]
         for page in range(10):
             for url in browser.get_projects_urls(bot.category, page=page + 1):
                 if url not in urls:
@@ -65,7 +68,12 @@ class BrowserThread(QtCore.QThread):
         report_path = Path(bot.report_folder) / 'result.xlsx'
         message = browser.send_message(project_url, text)
         to_excel([message], report_path)
-        MessageSentRepository().create(MessageSent(url=project_url))
+        MessageSentRepository().create(
+            MessageSent(
+                url=project_url,
+                account_name=browser.get_account_name(),
+            ),
+        )
 
 
 class CreateBotThread(QtCore.QThread):

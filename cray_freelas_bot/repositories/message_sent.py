@@ -9,7 +9,10 @@ from cray_freelas_bot.database import Session
 class MessageSentRepository(IRepository):
     def create(self, data: MessageSent) -> MessageSent:
         with Session() as session:
-            model = MessageSentModel(url=data.url)
+            model = MessageSentModel(
+                url=data.url,
+                account_name=data.account_name,
+            )
             session.add(model)
             session.commit()
             return self.to_dataclass(model)
@@ -31,4 +34,5 @@ class MessageSentRepository(IRepository):
         return MessageSent(
             id=model.id,
             url=model.url,
+            account_name=model.account_name,
         )
